@@ -15,3 +15,6 @@ the scripting library should support python for accessibility
 python is easy-to-use and much better for writing small scripts
 
 the scripting library will of course be in rust but will offically provide python bindings
+
+one of those will do the job but i haven't reseached yet which one is more fitting for this task
+https://github.com/PyO3/maturin https://github.com/PyO3/pyo3
