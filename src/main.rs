@@ -1,3 +1,4 @@
+#[cfg(feature = "desktop")]
 use dioxus::prelude::*;
 
 #[cfg(feature = "desktop")]
