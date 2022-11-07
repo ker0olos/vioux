@@ -9,7 +9,7 @@ with bare-minimum features included and everything else is added through communi
 so the main focus points of this project isn't features but the ui/ux and the scripting library
 
 the app will be build with rust for speed and cross-platform
-idealy using either https://github.com/iced-rs/iced or https://github.com/DioxusLabs/dioxus
+the ui will use https://dioxuslabs.com/guide
 
 the scripting library should support both rust and python for accessibility
 since python is easier-to-use and much better for writing small scripts than rust
