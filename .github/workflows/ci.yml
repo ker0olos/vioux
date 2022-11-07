@@ -34,6 +34,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - uses: arduino/setup-protoc@v1
       - name: cargo test
         uses: actions-rs/cargo@v1
         with:
@@ -51,6 +52,7 @@ jobs:
           toolchain: stable
           override: true
           components: clippy
+      - uses: arduino/setup-protoc@v1
       - name: cargo clippy
         uses: actions-rs/cargo@v1
         with:
