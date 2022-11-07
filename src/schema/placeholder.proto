@@ -1,0 +1,6 @@
+syntax = "proto3";
+package placeholder;
+
+message Request { string nonce = 1; }
+
+message Response { string nonce = 1; }

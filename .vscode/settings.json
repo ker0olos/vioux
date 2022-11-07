@@ -1,0 +1,28 @@
+{
+  "editor.tabSize": 4,
+  "editor.formatOnSave": true,
+  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.lens.references.enumVariant.enable": true,
+  "rust-analyzer.lens.references.trait.enable": true,
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+  },
+  // "shellcheck.run": "onSave",
+  // "[shell]": {
+  //   "editor.defaultFormatter": "timonwong.shellcheck",
+  //   "editor.codeActionsOnSave": {
+  //     "source.fixAll.shellcheck": true
+  //   },
+  // },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "files.exclude": {
+    ".git": true,
+    ".venv": true,
+    "target": true,
+  },
+  "explorer.fileNesting.patterns": {
+    "README.md": "LICENSE,.gitignore,action.yml",
+    "Cargo.toml": "rust-*,rustfmt*,pyproject*"
+  },
+}

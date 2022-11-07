@@ -1,0 +1,38 @@
+[package]
+name = "vioux"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+# The name of the native library. This is the name which will be used in Python to import the
+# library (i.e. `import string_sum`). If you change this, you must also change the name of the
+# `#[pymodule]` in `src/lib.rs`.
+name = "vioux"
+# "cdylib" is necessary to produce a shared library for Python to import from.
+#
+# Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
+# to `use string_sum;` unless the "rlib" or "lib" crate type is also included, e.g.:
+# crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib", "rlib"]
+
+doctest = false
+
+[profile.release]
+codegen-units = 1
+opt-level = 3
+lto = true
+
+[profile.bench]
+codegen-units = 1
+opt-level = 3
+lto = true
+
+[dependencies]
+prost  = "0.11.0"
+pyo3   = { version = "0.17.1", features = ["extension-module"] }
+dioxus = { version = "0.2.4", features = ["desktop"] }
+
+[dev-dependencies]
+
+[build-dependencies]
+prost-build = "0.11.1"
