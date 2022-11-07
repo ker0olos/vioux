@@ -11,10 +11,7 @@ so the main focus points of this project isn't features but the ui/ux and the sc
 the app will be build with rust for speed and cross-platform
 idealy using either https://github.com/iced-rs/iced or https://github.com/DioxusLabs/dioxus
 
-the scripting library should support python for accessibility
-python is easy-to-use and much better for writing small scripts
-
-the scripting library will of course be in rust but will offically provide python bindings
-
-one of those will do the job but i haven't reseached yet which one is more fitting for this task
-https://github.com/PyO3/maturin https://github.com/PyO3/pyo3
+the scripting library should support both rust and python for accessibility
+since python is easier-to-use and much better for writing small scripts than rust
+for the python bindings pyo3 is used
+https://pyo3.rs/v0.17.3/getting_started.html
