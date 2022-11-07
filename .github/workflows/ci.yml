@@ -1,68 +1,56 @@
-# name: ci
+name: ci
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
+on:
+  pull_request:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   linux:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: messense/maturin-action@v1
-#         with:
-#           manylinux: auto
-#           command: build
-#           args: --release --sdist -o dist --find-interpreter
-#       - name: Upload wheels
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: wheels
-#           path: dist
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - name: cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
 
-#   windows:
-#     runs-on: windows-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: messense/maturin-action@v1
-#         with:
-#           command: build
-#           args: --release -o dist --find-interpreter
-#       - name: Upload wheels
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: wheels
-#           path: dist
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt
+      - name: cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
 
-#   macos:
-#     runs-on: macos-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - uses: messense/maturin-action@v1
-#         with:
-#           command: build
-#           args: --release -o dist --universal2 --find-interpreter
-#       - name: Upload wheels
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: wheels
-#           path: dist
-
-#   release:
-#     name: Release
-#     runs-on: ubuntu-latest
-#     if: "startsWith(github.ref, 'refs/tags/')"
-#     needs: [macos, windows, linux]
-#     steps:
-#       - uses: actions/download-artifact@v2
-#         with:
-#           name: wheels
-#       - name: Publish to PyPI
-#         uses: messense/maturin-action@v1
-#         env:
-#           MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-#         with:
-#           command: upload
-#           args: --skip-existing *
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: install rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: clippy
+      - name: cargo clippy
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
