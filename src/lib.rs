@@ -1,6 +1,4 @@
-mod schema;
-
-// pub use schema::placeholder;
+pub mod server;
 
 #[cfg(feature = "pybindings")]
 use pyo3::prelude::*;
