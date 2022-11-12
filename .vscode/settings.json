@@ -7,19 +7,30 @@
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
   },
-  // "shellcheck.run": "onSave",
-  // "[shell]": {
-  //   "editor.defaultFormatter": "timonwong.shellcheck",
-  //   "editor.codeActionsOnSave": {
-  //     "source.fixAll.shellcheck": true
-  //   },
-  // },
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.python",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+  },
+  "python.languageServer": "Pylance",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.formatting.provider": "black",
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "files.exclude": {
-    ".git": true,
-    ".venv": true,
-    "target": true,
+    "**/.git": true,
+    "**/.venv": true,
+    "**/target": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.egg-info": true
   },
   "explorer.fileNesting.patterns": {
     "README.md": "LICENSE,.gitignore,action.yml",

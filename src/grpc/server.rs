@@ -1,17 +1,12 @@
 use tonic::{transport::Server, Request, Response, Status};
 
-use placeholder::{
+use super::placeholder::{
     placeholder_server::{Placeholder, PlaceholderServer},
-    PlaceholderRequest, PlaceholderResponse,
+    PlaceholderRequest, PlaceholderResponse, FILE_DESCRIPTOR_SET,
 };
 
 #[derive(Debug, Default)]
 struct MyPlaceholder {}
-
-#[allow(clippy::all)]
-mod placeholder {
-    tonic::include_proto!("placeholder");
-}
 
 #[tonic::async_trait]
 impl Placeholder for MyPlaceholder {
@@ -29,17 +24,20 @@ impl Placeholder for MyPlaceholder {
     }
 }
 
-pub fn spawn() {
+pub fn spawn() -> tokio::task::JoinHandle<Result<(), tonic::transport::Error>> {
     let addr = "0.0.0.0:50051".parse().unwrap();
     let placeholder = MyPlaceholder::default();
 
-    let handle = tokio::runtime::Handle::current();
+    let descriptor = tonic_reflection::server::Builder::configure()
+        .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
+        .build()
+        .unwrap();
 
-    handle.spawn(async move {
+    tokio::spawn(async move {
         Server::builder()
+            .add_service(descriptor)
             .add_service(PlaceholderServer::new(placeholder))
             .serve(addr)
             .await
-            .unwrap();
-    });
+    })
 }

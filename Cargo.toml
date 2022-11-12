@@ -17,6 +17,9 @@ crate-type = ["cdylib", "rlib"]
 # 
 doctest = false
 
+[profile.dev]
+lto = false
+
 # optimize for size
 [profile.release]
 codegen-units = 1
@@ -28,13 +31,12 @@ lto       = true
 [features]
 default     = ["desktop"]
 desktop     = ["dioxus/desktop"]
-pybindings  = ["pyo3/extension-module"]
 
 [dependencies]
-tonic  = "0.8.2"
-prost  = "0.11.2"
-anyhow = "1.0.66"
-pyo3   = { version = "0.17.3", optional = true  }
+tonic            = "0.8.2"
+tonic-reflection = "0.5.0"
+prost            = "0.11.2"
+anyhow           = "1.0.66"
 dioxus = { version = "0.2.4",  optional = true  }
 tokio  = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
 
