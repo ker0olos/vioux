@@ -1,6 +1,5 @@
-mod server;
-
-pub use server::spawn;
+pub(crate) mod client;
+pub mod server;
 
 #[allow(clippy::all)]
 pub(crate) mod placeholder {

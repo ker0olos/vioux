@@ -1,9 +1,9 @@
-[tool.black]
-target-version = ['py310']
+[build-system]
+requires = ["maturin>=0.13,<0.14"]
+build-backend = "maturin"
 
-[tool.isort]
-profile = "black"
-length_sort = true
+[project]
+name = "vioux"
+requires-python = ">=3.7"
 
-[tool.pytest.ini_options]
-addopts = "--isort --flake8 --black"
+dependencies = ["cffi"]

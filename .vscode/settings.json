@@ -1,7 +1,7 @@
 {
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
-  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.checkOnSave.command": "check",
   "rust-analyzer.lens.references.enumVariant.enable": true,
   "rust-analyzer.lens.references.trait.enable": true,
   "[rust]": {
@@ -17,11 +17,6 @@
   "python.linting.enabled": true,
   "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",
-  "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true,
-  "python.testing.pytestArgs": [
-    "tests"
-  ],
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "files.exclude": {
@@ -30,10 +25,9 @@
     "**/target": true,
     "**/__pycache__": true,
     "**/.pytest_cache": true,
-    "**/*.egg-info": true
   },
   "explorer.fileNesting.patterns": {
-    "README.md": "LICENSE,.gitignore,action.yml",
-    "Cargo.toml": "rust-*,rustfmt*,pyproject*"
+    "README.md": "LICENSE,.gitignore",
+    "Cargo.toml": "rustfmt.toml,pyproject.toml"
   },
 }

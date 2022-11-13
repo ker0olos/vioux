@@ -24,14 +24,13 @@ impl Placeholder for MyPlaceholder {
     }
 }
 
-pub fn spawn() -> tokio::task::JoinHandle<Result<(), tonic::transport::Error>> {
-    let addr = "0.0.0.0:50051".parse().unwrap();
+pub fn spawn() -> anyhow::Result<()> {
+    let addr = "0.0.0.0:50051".parse()?;
     let placeholder = MyPlaceholder::default();
 
     let descriptor = tonic_reflection::server::Builder::configure()
         .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
-        .build()
-        .unwrap();
+        .build()?;
 
     tokio::spawn(async move {
         Server::builder()
@@ -39,5 +38,7 @@ pub fn spawn() -> tokio::task::JoinHandle<Result<(), tonic::transport::Error>> {
             .add_service(PlaceholderServer::new(placeholder))
             .serve(addr)
             .await
-    })
+    });
+
+    Ok(())
 }
