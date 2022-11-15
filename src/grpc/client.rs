@@ -1,20 +1,21 @@
+use numpy::{ndarray::Array, IntoPyArray};
 use pyo3::prelude::*;
 
-use super::placeholder::{placeholder_client::PlaceholderClient, PlaceholderRequest};
+use super::proto::{image_client::ImageClient, FrameRequest};
 
 #[pyfunction]
-pub fn request(py: Python, nonce: String) -> PyResult<&PyAny> {
+pub fn request(py: Python) -> PyResult<&PyAny> {
     pyo3_asyncio::tokio::future_into_py(py, async move {
-        let mut client = PlaceholderClient::connect("http://0.0.0.0:50051")
-            .await
-            .unwrap();
+        let mut client = ImageClient::connect("http://0.0.0.0:50051").await.unwrap();
 
-        let request = tonic::Request::new(PlaceholderRequest { nonce });
+        let request = tonic::Request::new(FrameRequest {});
 
-        let response = client.send_message(request).await.unwrap();
+        let response = client.next_frame(request).await.unwrap();
 
-        let t = response.into_inner().nonce;
+        let ndarray = Array::from_vec(response.into_inner().frame);
 
-        Ok(t)
+        Ok(Python::with_gil(|py| {
+            PyObject::from(ndarray.into_pyarray(py))
+        }))
     })
 }

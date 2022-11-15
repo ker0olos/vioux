@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package vioux;
+
+service Image { rpc NextFrame(FrameRequest) returns (FrameResponse); }
+
+message FrameRequest {}
+
+message FrameResponse { bytes frame = 1; }

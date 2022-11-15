@@ -6,4 +6,8 @@ build-backend = "maturin"
 name = "vioux"
 requires-python = ">=3.7"
 
+[tool.isort]
+profile = "black"
+length_sort = true
+
 dependencies = ["cffi"]

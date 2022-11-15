@@ -1,24 +1,23 @@
 use tonic::{transport::Server, Request, Response, Status};
 
-use super::placeholder::{
-    placeholder_server::{Placeholder, PlaceholderServer},
-    PlaceholderRequest, PlaceholderResponse, FILE_DESCRIPTOR_SET,
+use super::proto::{
+    image_server::{Image, ImageServer},
+    FrameRequest, FrameResponse,
 };
 
-#[derive(Debug, Default)]
-struct MyPlaceholder {}
+#[derive(Default)]
+struct ImageService {}
 
 #[tonic::async_trait]
-impl Placeholder for MyPlaceholder {
-    async fn send_message(
+impl Image for ImageService {
+    async fn next_frame(
         &self,
-        request: Request<PlaceholderRequest>,
-    ) -> Result<Response<PlaceholderResponse>, Status> {
-        println!("Got a request: {:?}", request);
+        _: Request<FrameRequest>,
+    ) -> Result<Response<FrameResponse>, Status> {
+        // TODO
+        let placeholder = std::fs::read("img.jpeg").unwrap();
 
-        let reply = PlaceholderResponse {
-            nonce: format!("Returning \"{}\"!", request.into_inner().nonce),
-        };
+        let reply = FrameResponse { frame: placeholder };
 
         Ok(Response::new(reply))
     }
@@ -26,16 +25,12 @@ impl Placeholder for MyPlaceholder {
 
 pub fn spawn() -> anyhow::Result<()> {
     let addr = "0.0.0.0:50051".parse()?;
-    let placeholder = MyPlaceholder::default();
 
-    let descriptor = tonic_reflection::server::Builder::configure()
-        .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
-        .build()?;
+    let image_service_impl = ImageService::default();
 
     tokio::spawn(async move {
         Server::builder()
-            .add_service(descriptor)
-            .add_service(PlaceholderServer::new(placeholder))
+            .add_service(ImageServer::new(image_service_impl))
             .serve(addr)
             .await
     });

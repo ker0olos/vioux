@@ -34,9 +34,9 @@ desktop     = ["dioxus/desktop"]
 
 [dependencies]
 tonic            = "0.8.2"
-tonic-reflection = "0.5.0"
 prost            = "0.11.2"
 anyhow           = "1.0.66"
+numpy            = "0.17.2"
 dioxus       = { version = "0.2.4",  optional = true  }
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
 pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }

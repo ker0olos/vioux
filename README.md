@@ -23,7 +23,7 @@ The app is built with rust for speed, cross-platform, multithreading, etc.
 
 The UI uses [dioxus](https://github.com/DioxusLabs/dioxus) which is a react-like GUI library because css is the best human innovation since fire and [iced](https://github.com/iced-rs/iced) is still not production-ready.
 
-Scripts [plugins] connect with vioux through a local gRPC server (with reflection).
+Scripts [plugins] connect with vioux through a local gRPC server.
 
 > **Note**
 > Plugins are called [executed] during rendering and while seeking around in the project timeline.
