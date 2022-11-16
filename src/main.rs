@@ -13,9 +13,7 @@ async fn main() -> anyhow::Result<()> {
     //     })
     // });
 
-    loop {
-        //
-    }
+    loop {}
 
     Ok(())
 }

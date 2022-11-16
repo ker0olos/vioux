@@ -8,7 +8,7 @@ import vioux
 async def main():
     image = await vioux.request()
 
-    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     cv2.imshow("cv2", image)
     cv2.waitKey(0)
