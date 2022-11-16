@@ -1,66 +1,58 @@
-use image::{ImageBuffer, Pixel};
-use tonic::{transport::Server, Request, Response, Status};
+use image::DynamicImage;
+use tonic::{Code, Request, Response, Status};
 
 use super::proto::{
-    vioux_server::{Vioux, ViouxServer},
-    FrameRequestParameters, Image, SampleLayout,
+    vioux_server::Vioux, Image, RequestFrameParameters, RequestedFrame, UpdateFrameParameters,
+    UpdatedFrame,
 };
 
 #[derive(Default)]
-struct ViouxService {}
-
-fn as_sample_layout<P>(img: &ImageBuffer<P, Vec<P::Subpixel>>) -> SampleLayout
-where
-    P: Pixel + 'static,
-{
-    let channels = <P as Pixel>::CHANNEL_COUNT;
-
-    let width = img.width();
-    let height = img.height();
-
-    let height_stride = (channels as usize)
-        .checked_mul(width as usize)
-        .expect("Row major packed image can not be described because it does not fit into memory");
-
-    SampleLayout {
-        channels: channels as u32,
-        channel_stride: 1,
-        width,
-        width_stride: channels as u32,
-        height,
-        height_stride: height_stride as u32,
-    }
-}
+pub struct ViouxService {}
 
 #[tonic::async_trait]
 impl Vioux for ViouxService {
     async fn request_frame(
         &self,
-        _: Request<FrameRequestParameters>,
-    ) -> Result<Response<Image>, Status> {
-        // TODO
-        let placeholder = image::open("img.jpeg").unwrap().into_rgb8();
+        _: Request<RequestFrameParameters>,
+    ) -> Result<Response<RequestedFrame>, Status> {
+        let placeholder = image::io::Reader::open("img.jpeg")
+            .unwrap()
+            .decode()
+            .unwrap();
 
-        let reply = Image {
-            sample_layout: Some(as_sample_layout(&placeholder)),
-            raw: placeholder.into_raw(),
+        let reply = RequestedFrame {
+            image: Some(Image {
+                channels: 4u32,
+                height: placeholder.height(),
+                width: placeholder.width(),
+                raw: placeholder.into_rgba8().into_raw(),
+            }),
         };
 
         Ok(Response::new(reply))
     }
-}
 
-pub fn spawn() -> anyhow::Result<()> {
-    let addr = "0.0.0.0:50051".parse()?;
+    async fn update_frame(
+        &self,
+        params: Request<UpdateFrameParameters>,
+    ) -> Result<Response<UpdatedFrame>, Status> {
+        let Image {
+            height,
+            width,
+            channels,
+            raw,
+        } = params.into_inner().image.unwrap();
 
-    let timeline_service_impl = ViouxService::default();
+        let img = if channels == 3 {
+            DynamicImage::from(image::RgbImage::from_raw(width, height, raw).unwrap())
+        } else if channels == 4 {
+            DynamicImage::from(image::RgbaImage::from_raw(width, height, raw).unwrap())
+        } else {
+            return Err(Status::new(Code::InvalidArgument, "must be RGB or RGBA"));
+        };
 
-    tokio::spawn(async move {
-        Server::builder()
-            .add_service(ViouxServer::new(timeline_service_impl))
-            .serve(addr)
-            .await
-    });
+        img.save("img_export.jpeg").unwrap();
 
-    Ok(())
+        Ok(Response::new(UpdatedFrame::default()))
+    }
 }

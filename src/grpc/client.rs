@@ -1,53 +1,56 @@
-use numpy::{
-    ndarray::{Array3, Dim, ShapeBuilder},
-    IntoPyArray,
-};
 use pyo3::prelude::*;
 
-use super::proto::{vioux_client::ViouxClient, FrameRequestParameters, Image, SampleLayout};
+use numpy::{IntoPyArray, PyArray3};
 
-fn into_ndarray3(
-    sample_layout: SampleLayout,
-    raw: Vec<u8>,
-) -> numpy::ndarray::Array<u8, Dim<[usize; 3]>> {
-    let SampleLayout {
-        channels,
-        channel_stride,
-        height,
-        height_stride,
-        width,
-        width_stride,
-    } = sample_layout;
+use crate::utils::processing::into_ndarray3;
 
-    let shape = (height as usize, width as usize, channels as usize);
+// All code here is for the python scripting library
+// and is not used directly in/by vioux
 
-    let strides = (
-        height_stride as usize,
-        width_stride as usize,
-        channel_stride as usize,
-    );
+use super::proto::{
+    vioux_client::ViouxClient, Image, RequestFrameParameters, UpdateFrameParameters,
+};
 
-    println!("shape: {:?}", shape);
-    println!("strides: {:?}", strides);
-
-    Array3::from_shape_vec(shape.strides(strides), raw).unwrap()
+async fn connect() -> ViouxClient<tonic::transport::Channel> {
+    ViouxClient::connect("http://0.0.0.0:50051").await.unwrap()
 }
 
 #[pyfunction]
-pub fn request(py: Python) -> PyResult<&PyAny> {
-    pyo3_asyncio::tokio::future_into_py(py, async move {
-        let mut client = ViouxClient::connect("http://0.0.0.0:50051").await.unwrap();
+pub fn request_frame(py: Python) -> PyResult<&PyAny> {
+    let request = tonic::Request::new(RequestFrameParameters::default());
 
-        let request = tonic::Request::new(FrameRequestParameters {});
+    pyo3_asyncio::tokio::future_into_py(py, async move {
+        let mut client = connect().await;
 
         let response = client.request_frame(request).await.unwrap();
 
-        let Image { sample_layout, raw } = response.into_inner();
-
-        let ndarray = into_ndarray3(sample_layout.unwrap(), raw);
+        let ndarray = into_ndarray3(response.into_inner().image.unwrap());
 
         Ok(Python::with_gil(|py| {
             PyObject::from(ndarray.into_pyarray(py))
         }))
+    })
+}
+
+#[pyfunction]
+pub fn update_frame(py: Python, image: PyObject) -> PyResult<&PyAny> {
+    let ndarray = image.extract::<&PyArray3<u8>>(py)?;
+
+    let shape = ndarray.shape();
+    let raw = ndarray.to_vec().unwrap();
+
+    let request = tonic::Request::new(UpdateFrameParameters {
+        image: Some(Image {
+            raw,
+            height: shape[0] as u32,
+            width: shape[1] as u32,
+            channels: shape[2] as u32,
+        }),
+    });
+
+    pyo3_asyncio::tokio::future_into_py(py, async move {
+        let mut client = connect().await;
+        client.update_frame(request).await.unwrap();
+        Ok(())
     })
 }

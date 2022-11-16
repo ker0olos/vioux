@@ -1,19 +1,21 @@
 syntax = "proto3";
 
-service Vioux { rpc RequestFrame(FrameRequestParameters) returns (Image); }
-
-message FrameRequestParameters {}
-
-message Image {
-  SampleLayout sample_layout = 1;
-  bytes raw = 2;
+service Vioux {
+  rpc RequestFrame(RequestFrameParameters) returns (RequestedFrame);
+  rpc UpdateFrame(UpdateFrameParameters) returns (UpdatedFrame);
 }
 
-message SampleLayout {
+message RequestFrameParameters {}
+
+message RequestedFrame { Image image = 1; }
+
+message UpdateFrameParameters { Image image = 1; }
+
+message UpdatedFrame {}
+
+message Image {
   uint32 channels = 1;
-  uint32 channel_stride = 2;
-  uint32 height = 3;
-  uint32 height_stride = 4;
-  uint32 width = 5;
-  uint32 width_stride = 6;
+  uint32 height = 2;
+  uint32 width = 3;
+  bytes raw = 4;
 }

@@ -1,10 +1,21 @@
 // #[cfg(feature = "desktop")]
 // use dioxus::{desktop::tao, prelude::*};
 
+use vioux::{ViouxServer, ViouxService};
+
 #[tokio::main]
 #[cfg(feature = "desktop")]
 async fn main() -> anyhow::Result<()> {
-    vioux::grpc::server::spawn()?;
+    let addr = "0.0.0.0:50051".parse()?;
+
+    let vioux_service_impl = ViouxService::default();
+
+    tokio::spawn(async move {
+        tonic::transport::Server::builder()
+            .add_service(ViouxServer::new(vioux_service_impl))
+            .serve(addr)
+            .await
+    });
 
     // dioxus::desktop::launch_cfg(app, |c| {
     //     c.with_window(|w| {

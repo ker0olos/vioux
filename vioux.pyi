@@ -1,7 +1,11 @@
 import numpy
 
-async def request() -> numpy.ndarray:
-    # TODO DOCs
+async def request_frame() -> numpy.ndarray:
     """
-    Placeholder
+    TODO
+    """
+
+async def update_frame(image: numpy.ndarray) -> None:
+    """
+    TODO
     """

@@ -1,4 +1,4 @@
-pub(crate) mod client;
+pub mod client;
 pub mod server;
 
 #[allow(clippy::all)]
