@@ -1,21 +1,42 @@
 syntax = "proto3";
 
 service Vioux {
-  rpc RequestFrame(RequestFrameParameters) returns (RequestedFrame);
-  rpc UpdateFrame(UpdateFrameParameters) returns (UpdatedFrame);
+  rpc RequestFrame(RequestOpts) returns (RequestedFrame);
+  rpc UpdateFrame(RequestOpts) returns (UpdatedFrame);
 }
 
-message RequestFrameParameters {}
+message RequestOpts { optional Image image = 1; }
 
 message RequestedFrame { Image image = 1; }
 
-message UpdateFrameParameters { Image image = 1; }
-
 message UpdatedFrame {}
 
+enum ColorType {
+  // Pixel is 8-bit luminance
+  L8 = 0;
+  // Pixel is 8-bit luminance with an alpha channel
+  La8 = 1;
+  // Pixel is 8-bit RGB
+  Rgb8 = 2;
+  // Pixel is 8-bit RGB with an alpha channel
+  Rgba8 = 3;
+  // Pixel is 16-bit luminance
+  L16 = 4;
+  // Pixel is 16-bit luminance with an alpha channel
+  La16 = 5;
+  // Pixel is 16-bit RGB
+  Rgb16 = 6;
+  // Pixel is 16-bit RGBA
+  Rgba16 = 7;
+  // Pixel is 32-bit float RGB
+  Rgb32F = 8;
+  // Pixel is 32-bit float RGBA
+  Rgba32F = 9;
+}
+
 message Image {
-  uint32 channels = 1;
-  uint32 height = 2;
-  uint32 width = 3;
+  uint32 height = 1;
+  uint32 width = 2;
+  ColorType color_type = 3;
   bytes raw = 4;
 }
