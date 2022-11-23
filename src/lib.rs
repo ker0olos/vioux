@@ -3,8 +3,8 @@ mod grpc;
 use pyo3::prelude::*;
 
 // used by main.rs
-pub use grpc::proto::vioux_server::ViouxServer;
-pub use grpc::server::ViouxService;
+pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
+pub use grpc::{proto::RequestOpts, server::ViouxService};
 
 #[pymodule]
 // must match the crate's name

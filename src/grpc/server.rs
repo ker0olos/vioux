@@ -11,9 +11,9 @@ impl Vioux for ViouxService {
     async fn request_frame(
         &self,
         _request: Request<RequestOpts>,
-    ) -> Result<Response<RequestedFrame>, Status> {
+    ) -> tonic::Result<Response<RequestedFrame>> {
         // TODO REMOVE placeholder
-        let image = image::io::Reader::open("img.jpeg")
+        let image = image::io::Reader::open("tests/assets/img.jpeg")
             .unwrap()
             .decode()
             .unwrap();
@@ -36,7 +36,7 @@ impl Vioux for ViouxService {
     async fn update_frame(
         &self,
         request: Request<RequestOpts>,
-    ) -> Result<Response<UpdatedFrame>, Status> {
+    ) -> tonic::Result<Response<UpdatedFrame>> {
         let image = request.into_inner().image.unwrap();
 
         // try to get a DynamicImage obj from the raw image

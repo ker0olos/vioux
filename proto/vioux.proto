@@ -1,7 +1,10 @@
 syntax = "proto3";
 
 service Vioux {
+  //
   rpc RequestFrame(RequestOpts) returns (RequestedFrame);
+
+  //
   rpc UpdateFrame(RequestOpts) returns (UpdatedFrame);
 }
 
@@ -35,8 +38,8 @@ enum ColorType {
 }
 
 message Image {
-  uint32 height = 1;
-  uint32 width = 2;
-  ColorType color_type = 3;
-  bytes raw = 4;
+  bytes raw = 1;
+  uint32 height = 2;
+  uint32 width = 3;
+  ColorType color_type = 4;
 }

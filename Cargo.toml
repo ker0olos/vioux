@@ -44,6 +44,8 @@ pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
 tokio        = { version = "1.21.2", features = ["macros", "rt-multi-thread"] }
 
 [dev-dependencies]
+image-compare = "0.2.3"
+more-asserts  = "0.3.1"
 
 [build-dependencies]
 tonic-build = "0.8.2"
