@@ -1,6 +1,6 @@
 use more_asserts::assert_gt;
 
-use vioux::{RequestOpts, Vioux, ViouxService};
+use vioux::{ColorType, Image, RequestOpts, Vioux, ViouxService};
 
 macro_rules! compare_images {
     ($title:literal => $file_name:literal => $image_one:expr) => {
@@ -32,17 +32,43 @@ macro_rules! compare_images {
 }
 
 #[tokio::test]
-pub async fn test_request() {
+pub async fn test_request_frame() {
     let service = ViouxService::default();
 
-    let req = service
+    let response = service
         .request_frame(tonic::Request::new(RequestOpts { image: None }))
         .await
         .unwrap();
 
-    let image = req.into_inner().image.unwrap();
+    let image = response.into_inner().image.unwrap();
 
     let image = image::RgbImage::from_raw(image.width, image.height, image.raw).unwrap();
 
     compare_images!("request" => "img.jpeg" => &image);
+}
+
+#[tokio::test]
+pub async fn test_update_frame() {
+    let service = ViouxService::default();
+
+    let image = image::io::Reader::open("tests/assets/img.jpeg")
+        .unwrap()
+        .decode()
+        .unwrap();
+
+    let color_type: ColorType = image.color().into();
+
+    // send a raw decoded image to the client
+    let image = Some(Image {
+        width: image.width(),
+        height: image.height(),
+        raw: image.into_bytes(),
+        color_type: color_type.into(),
+    });
+
+    let response = service
+        .update_frame(tonic::Request::new(RequestOpts { image }))
+        .await;
+
+    assert_eq!(response.is_ok(), true);
 }

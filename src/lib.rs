@@ -4,7 +4,10 @@ use pyo3::prelude::*;
 
 // used by main.rs
 pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
-pub use grpc::{proto::RequestOpts, server::ViouxService};
+pub use grpc::{
+    proto::{ColorType, Image, RequestOpts},
+    server::ViouxService,
+};
 
 #[pymodule]
 // must match the crate's name

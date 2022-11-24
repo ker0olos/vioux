@@ -61,8 +61,8 @@ impl Vioux for ViouxService {
             }
         };
 
-        // TODO REMOVE placeholder
-        image.save("img_export.jpeg").unwrap();
+        // // TODO REMOVE placeholder
+        // image.save("img_export.jpeg").unwrap();
 
         Ok(Response::new(UpdatedFrame::default()))
     }
