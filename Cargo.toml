@@ -48,4 +48,4 @@ image-compare = "0.2.3"
 more-asserts  = "0.3.1"
 
 [build-dependencies]
-tonic-build = "0.8.2"
+tonic-build = "0.8.3"
