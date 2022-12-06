@@ -41,7 +41,7 @@ image            = "0.24.5"
 dioxus       = { version = "0.2.4",  optional = true  }
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
 pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
-tokio        = { version = "1.22.0", features = ["macros", "rt-multi-thread"] }
+tokio        = { version = "1.23.0", features = ["macros", "rt-multi-thread"] }
 
 [dev-dependencies]
 image-compare = "0.2.3"
