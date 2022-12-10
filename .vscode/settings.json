@@ -26,6 +26,7 @@
     "**/target": true,
     "**/__pycache__": true,
     "**/.pytest_cache": true,
+    "**/snapshots": true,
   },
   "explorer.fileNesting.patterns": {
     "README.md": "LICENSE,.gitignore",

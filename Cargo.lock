@@ -44,6 +44,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "216261ddc8289130e551ddcd5ce8a064710c0d064a4d2895c67151c92b5443f6"
 
 [[package]]
+name = "arrayvec"
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8da52d66c7071e2e3fa2a1e5c6d088fec47b593032b254f5e980de8ea54454d6"
+
+[[package]]
 name = "async-stream"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -616,6 +622,15 @@ name = "either"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90e5c1c8368803113bf0c9584fc495a58b86dc8a29edbf8fe877d21d9507e797"
+
+[[package]]
+name = "encoding_rs"
+version = "0.8.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9852635589dc9f9ea1b6fe9f05b50ef208c85c834a562f0c6abb1c475736ec2b"
+dependencies = [
+ "cfg-if",
+]
 
 [[package]]
 name = "exr"
@@ -2420,6 +2435,174 @@ dependencies = [
 ]
 
 [[package]]
+name = "symphonia"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "lazy_static",
+ "symphonia-bundle-flac",
+ "symphonia-bundle-mp3",
+ "symphonia-codec-aac",
+ "symphonia-codec-adpcm",
+ "symphonia-codec-alac",
+ "symphonia-codec-pcm",
+ "symphonia-codec-vorbis",
+ "symphonia-core",
+ "symphonia-format-isomp4",
+ "symphonia-format-mkv",
+ "symphonia-format-ogg",
+ "symphonia-format-wav",
+ "symphonia-metadata",
+]
+
+[[package]]
+name = "symphonia-bundle-flac"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+ "symphonia-utils-xiph",
+]
+
+[[package]]
+name = "symphonia-bundle-mp3"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "bitflags",
+ "lazy_static",
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+]
+
+[[package]]
+name = "symphonia-codec-aac"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "lazy_static",
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-codec-adpcm"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-codec-alac"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-codec-pcm"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-codec-vorbis"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+ "symphonia-utils-xiph",
+]
+
+[[package]]
+name = "symphonia-core"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "arrayvec",
+ "bitflags",
+ "bytemuck",
+ "lazy_static",
+ "log",
+]
+
+[[package]]
+name = "symphonia-format-isomp4"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "encoding_rs",
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+ "symphonia-utils-xiph",
+]
+
+[[package]]
+name = "symphonia-format-mkv"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "lazy_static",
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+ "symphonia-utils-xiph",
+]
+
+[[package]]
+name = "symphonia-format-ogg"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+ "symphonia-utils-xiph",
+]
+
+[[package]]
+name = "symphonia-format-wav"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "log",
+ "symphonia-core",
+ "symphonia-metadata",
+]
+
+[[package]]
+name = "symphonia-metadata"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "encoding_rs",
+ "lazy_static",
+ "log",
+ "symphonia-core",
+]
+
+[[package]]
+name = "symphonia-utils-xiph"
+version = "0.5.1"
+source = "git+https://github.com/pdeljanov/Symphonia#055d7547adbd669e7d70e3dc1e9f8b536d6a5421"
+dependencies = [
+ "symphonia-core",
+ "symphonia-metadata",
+]
+
+[[package]]
 name = "syn"
 version = "1.0.103"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2918,6 +3101,7 @@ dependencies = [
  "prost",
  "pyo3",
  "pyo3-asyncio",
+ "symphonia",
  "tokio",
  "tonic",
  "tonic-build",

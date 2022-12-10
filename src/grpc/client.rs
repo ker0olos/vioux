@@ -1,9 +1,9 @@
-use pyo3::prelude::*;
+use pyo3::{prelude::*, types::PyByteArray, AsPyPointer};
 
 use numpy::{IntoPyArray, PyArray3};
 
 use super::{
-    proto::{vioux_client::ViouxClient, Image, RequestOpts},
+    proto::{vioux_client::ViouxClient, Image, RequestOptions},
     utils::{get_color_type, into_array3},
 };
 
@@ -22,7 +22,7 @@ pub fn request_frame(py: Python) -> PyResult<&PyAny> {
         let mut client = connect().await;
 
         let response = client
-            .request_frame(RequestOpts::default())
+            .request_frame(RequestOptions::default())
             .await
             .expect("Request failed")
             .into_inner();
@@ -33,7 +33,10 @@ pub fn request_frame(py: Python) -> PyResult<&PyAny> {
         let ndarray = into_array3(image)?;
 
         // convert the ndarray into an python numpy array and return it
-        Ok(Python::with_gil(|py| ndarray.into_pyarray(py).to_owned()))
+        Ok(Python::with_gil(|py| {
+            let array = ndarray.into_pyarray(py).to_object(py);
+            array
+        }))
     })
 }
 
@@ -47,7 +50,7 @@ pub fn update_frame(py: Python, image: PyObject) -> PyResult<&PyAny> {
     let shape = ndarray.shape();
     let raw = ndarray.to_vec()?;
 
-    let request = RequestOpts {
+    let request = RequestOptions {
         image: Some(Image {
             raw,
             width: shape[1] as u32,
@@ -61,5 +64,31 @@ pub fn update_frame(py: Python, image: PyObject) -> PyResult<&PyAny> {
         let mut client = connect().await;
         client.update_frame(request).await.expect("Request failed");
         Ok(())
+    })
+}
+
+#[pyfunction]
+pub fn request_audio(py: Python) -> PyResult<&PyAny> {
+    pyo3_asyncio::tokio::future_into_py(py, async {
+        let mut client = connect().await;
+
+        let response = client
+            .request_audio(RequestOptions::default())
+            .await
+            .expect("Request failed")
+            .into_inner();
+
+        let audio = response.audio.expect("Received an empty response");
+
+        // convert the ndarray into an python numpy array and return it
+        Ok(Python::with_gil(|py| {
+            let byte_array = PyByteArray::new(py, &audio.samples).to_object(py);
+            (
+                byte_array,
+                audio.sample_rate,
+                16 / 8, // TODO
+                audio.channels,
+            )
+        }))
     })
 }

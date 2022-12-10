@@ -1,6 +1,6 @@
 use more_asserts::assert_gt;
 
-use vioux::{ColorType, Image, RequestOpts, Vioux, ViouxService};
+use vioux::{ColorType, Image, RequestOptions, Vioux, ViouxService};
 
 macro_rules! compare_images {
     ($title:literal => $file_name:literal => $image_one:expr) => {
@@ -36,7 +36,7 @@ pub async fn test_request_frame() {
     let service = ViouxService::default();
 
     let response = service
-        .request_frame(tonic::Request::new(RequestOpts { image: None }))
+        .request_frame(tonic::Request::new(RequestOptions { image: None }))
         .await
         .unwrap();
 
@@ -67,7 +67,7 @@ pub async fn test_update_frame() {
     });
 
     let response = service
-        .update_frame(tonic::Request::new(RequestOpts { image }))
+        .update_frame(tonic::Request::new(RequestOptions { image }))
         .await;
 
     assert_eq!(response.is_ok(), true);

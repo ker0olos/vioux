@@ -2,44 +2,65 @@ syntax = "proto3";
 
 service Vioux {
   //
-  rpc RequestFrame(RequestOpts) returns (RequestedFrame);
+  rpc RequestFrame(RequestOptions) returns (RequestedFrame);
 
   //
-  rpc UpdateFrame(RequestOpts) returns (UpdatedFrame);
+  rpc RequestAudio(RequestOptions) returns (RequestedAudio);
+
+  //
+  rpc UpdateFrame(RequestOptions) returns (UpdatedFrame);
 }
 
-message RequestOpts { optional Image image = 1; }
+message RequestOptions { optional Image image = 1; }
 
 message RequestedFrame { Image image = 1; }
+
+message RequestedAudio { Audio audio = 1; }
 
 message UpdatedFrame {}
 
 enum ColorType {
-  // Pixel is 8-bit luminance
-  L8 = 0;
-  // Pixel is 8-bit luminance with an alpha channel
-  La8 = 1;
-  // Pixel is 8-bit RGB
-  Rgb8 = 2;
-  // Pixel is 8-bit RGB with an alpha channel
-  Rgba8 = 3;
-  // Pixel is 16-bit luminance
-  L16 = 4;
-  // Pixel is 16-bit luminance with an alpha channel
-  La16 = 5;
-  // Pixel is 16-bit RGB
-  Rgb16 = 6;
-  // Pixel is 16-bit RGBA
-  Rgba16 = 7;
-  // Pixel is 32-bit float RGB
-  Rgb32F = 8;
-  // Pixel is 32-bit float RGBA
-  Rgba32F = 9;
+  L8 = 0;  // Pixel is 8-bit luminance
+  La8 = 1; // Pixel is 8-bit luminance with an alpha channel
+
+  Rgb8 = 2;  // Pixel is 8-bit RGB
+  Rgba8 = 3; // Pixel is 8-bit RGB with an alpha channel
+
+  L16 = 4;  // Pixel is 16-bit luminance
+  La16 = 5; // Pixel is 16-bit luminance with an alpha channel
+
+  Rgb16 = 6;  // Pixel is 16-bit RGB
+  Rgba16 = 7; // Pixel is 16-bit RGBA
+
+  Rgb32F = 8;  // Pixel is 32-bit float RGB
+  Rgba32F = 9; // Pixel is 32-bit float RGBA
+}
+
+enum SampleFormat {
+  U8 = 0;  // Unsigned 8-bit integer.
+  U16 = 1; // Unsigned 16-bit integer.
+  U24 = 2; // Unsigned 24-bit integer.
+  U32 = 3; // Unsigned 32-bit integer.
+
+  S8 = 4;  // Signed 8-bit integer
+  S16 = 5; // Signed 16-bit integer
+  S24 = 6; // Signed 24-bit integer
+  S32 = 7; // Signed 32-bit integer
+
+  F32 = 8; // Single prevision (32-bit) floating point
+  F64 = 9; // Double precision (64-bit) floating point
 }
 
 message Image {
   bytes raw = 1;
-  uint32 height = 2;
+  ColorType color_type = 2;
   uint32 width = 3;
-  ColorType color_type = 4;
+  uint32 height = 4;
+}
+
+message Audio {
+  bytes samples = 1;
+  SampleFormat sample_format = 2;
+  uint32 sample_rate = 3;
+  uint32 channels = 4;
 }
