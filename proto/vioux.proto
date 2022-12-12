@@ -36,21 +36,6 @@ enum ColorType {
   Rgba32F = 9; // Pixel is 32-bit float RGBA
 }
 
-enum SampleFormat {
-  U8 = 0;  // Unsigned 8-bit integer.
-  U16 = 1; // Unsigned 16-bit integer.
-  U24 = 2; // Unsigned 24-bit integer.
-  U32 = 3; // Unsigned 32-bit integer.
-
-  S8 = 4;  // Signed 8-bit integer
-  S16 = 5; // Signed 16-bit integer
-  S24 = 6; // Signed 24-bit integer
-  S32 = 7; // Signed 32-bit integer
-
-  F32 = 8; // Single prevision (32-bit) floating point
-  F64 = 9; // Double precision (64-bit) floating point
-}
-
 message Image {
   bytes raw = 1;
   ColorType color_type = 2;
@@ -60,7 +45,7 @@ message Image {
 
 message Audio {
   bytes samples = 1;
-  SampleFormat sample_format = 2;
-  uint32 sample_rate = 3;
+  uint32 sample_rate = 2;
+  uint32 sample_width = 3;
   uint32 channels = 4;
 }
