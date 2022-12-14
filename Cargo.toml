@@ -5,15 +5,13 @@ edition = "2021"
 
 [lib]
 # The name of the native library. This is the name which will be used in Python to import the
-# library (i.e. `import string_sum`). If you change this, you must also change the name of the
-# `#[pymodule]` in `src/lib.rs`.
+# library (i.e. `import vioux`)
 name = "vioux"
 # "cdylib" is necessary to produce a shared library for Python to import from.
-#
 # Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
-# to `use string_sum;` unless the "rlib" or "lib" crate type is also included, e.g.:
+# to `use vioux;` unless the "rlib" or "lib" included
 crate-type = ["cdylib", "rlib"]
-# 
+#
 doctest = false
 
 [profile.dev]
@@ -36,20 +34,21 @@ tonic            = "0.8.3"
 prost            = "0.11.3"
 anyhow           = "1.0.66"
 numpy            = "0.17.2"
-image            = "0.24.5"
 dioxus       = { version = "0.2.4",  optional = true  }
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
 pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
 tokio        = { version = "1.23.0", features = ["macros", "rt-multi-thread"] }
 
+[dependencies.image]
+version  = "0.24.5"
+
 [dependencies.symphonia]
 version  = "0.5.1"
-git = "https://github.com/pdeljanov/Symphonia"
 features = ["all"]
+git = "https://github.com/pdeljanov/Symphonia"
 
 [dev-dependencies]
-image-compare = "0.2.3"
-more-asserts  = "0.3.1"
+md-5 = "0.10.5"
 
 [build-dependencies]
 tonic-build = "0.8.4"

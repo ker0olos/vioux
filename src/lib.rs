@@ -5,7 +5,7 @@ use pyo3::prelude::*;
 // used by main.rs
 pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
 pub use grpc::{
-    proto::{ColorType, Image, RequestOptions},
+    proto::{Audio, ColorType, Image, RequestOptions},
     server::ViouxService,
 };
 

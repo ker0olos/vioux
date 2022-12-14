@@ -24,9 +24,11 @@ async fn main() -> anyhow::Result<()> {
     //     })
     // });
 
-    loop {}
+    loop {
+        std::thread::yield_now();
+    }
 
-    Ok(())
+    // Ok(())
 }
 
 // #[cfg(feature = "desktop")]

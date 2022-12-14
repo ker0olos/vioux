@@ -1,7 +1,7 @@
 {
   "editor.tabSize": 4,
   "editor.formatOnSave": true,
-  "rust-analyzer.checkOnSave.command": "check",
+  "rust-analyzer.checkOnSave.command": "clippy",
   "rust-analyzer.lens.references.enumVariant.enable": true,
   "rust-analyzer.lens.references.trait.enable": true,
   "[rust]": {
@@ -26,7 +26,6 @@
     "**/target": true,
     "**/__pycache__": true,
     "**/.pytest_cache": true,
-    "**/snapshots": true,
   },
   "explorer.fileNesting.patterns": {
     "README.md": "LICENSE,.gitignore",
