@@ -6,19 +6,22 @@ use vioux::{ColorType, Image, RequestOptions, Vioux, ViouxService};
 fn compare_images(file_name: &str, requested_image: Image) {
     let image_path = PathBuf::from(format!("tests/assets/{}", file_name));
 
-    let requested_image = image::DynamicImage::from(
-        image::RgbImage::from_raw(
-            requested_image.width,
-            requested_image.height,
-            requested_image.raw,
-        )
-        .unwrap(),
-    );
-
     let loaded_image = image::io::Reader::open(image_path)
         .unwrap()
         .decode()
         .unwrap();
+
+    assert_eq!(requested_image.width, loaded_image.width());
+    assert_eq!(requested_image.height, loaded_image.height());
+
+    let requested_image = image::DynamicImage::from(
+        image::RgbImage::from_raw(
+            requested_image.width,
+            requested_image.height,
+            requested_image.data,
+        )
+        .unwrap(),
+    );
 
     let first_hash = Md5::digest(requested_image.into_bytes());
     let second_hash = Md5::digest(loaded_image.into_bytes());
@@ -55,7 +58,7 @@ pub async fn test_update_frame() {
     let image = Some(Image {
         width: image.width(),
         height: image.height(),
-        raw: image.into_bytes(),
+        data: image.into_bytes(),
         color_type: color_type.into(),
     });
 

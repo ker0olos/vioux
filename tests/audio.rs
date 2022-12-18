@@ -16,8 +16,8 @@ fn compare_clips(file_name: &str, requested_clip: Audio) {
     assert_eq!(requested_clip.sample_width, loaded_clip.sample_width);
     assert_eq!(requested_clip.channels, loaded_clip.channels);
 
-    let first_hash = Md5::digest(requested_clip.samples);
-    let second_hash = Md5::digest(loaded_clip.samples);
+    let first_hash = Md5::digest(requested_clip.data);
+    let second_hash = Md5::digest(loaded_clip.data);
 
     assert_eq!(first_hash, second_hash);
 }

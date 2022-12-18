@@ -28,13 +28,13 @@ pub mod image_types {
     pub type GrayImage = image::ImageBuffer<Luma<u8>, Vec<u8>>;
     pub type GrayAlphaImage = image::ImageBuffer<LumaA<u8>, Vec<u8>>;
 
-    // pub type Rgb16Image = image::ImageBuffer<Rgb<u16>, Vec<u16>>;
-    // pub type Rgba16Image = image::ImageBuffer<Rgba<u16>, Vec<u16>>;
-    // pub type Gray16Image = image::ImageBuffer<Luma<u16>, Vec<u16>>;
-    // pub type GrayAlpha16Image = image::ImageBuffer<LumaA<u16>, Vec<u16>>;
+    pub type Rgb16Image = image::ImageBuffer<Rgb<u16>, Vec<u16>>;
+    pub type Rgba16Image = image::ImageBuffer<Rgba<u16>, Vec<u16>>;
+    pub type Gray16Image = image::ImageBuffer<Luma<u16>, Vec<u16>>;
+    pub type GrayAlpha16Image = image::ImageBuffer<LumaA<u16>, Vec<u16>>;
 
-    // pub type Rgb32FImage = image::ImageBuffer<Rgb<f32>, Vec<f32>>;
-    // pub type Rgba32FImage = image::ImageBuffer<Rgba<f32>, Vec<f32>>;
+    pub type Rgb32FImage = image::ImageBuffer<Rgb<f32>, Vec<f32>>;
+    pub type Rgba32FImage = image::ImageBuffer<Rgba<f32>, Vec<f32>>;
 }
 
 // functions used by server.rs
@@ -101,7 +101,7 @@ impl proto::Audio {
         //     .n_frames
         //     .context("cannot calculate duration")?;
 
-        let mut samples = Vec::new();
+        let mut data = Vec::new();
 
         loop {
             let packet = match format.next_packet() {
@@ -125,16 +125,16 @@ impl proto::Audio {
             // Decode the packet into audio samples.
             match decoder.decode(&packet) {
                 Ok(decoded) => match &decoded {
-                    AudioBufferRef::U8(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::U16(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::U24(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::U32(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::S8(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::S16(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::S24(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::S32(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::F32(buf) => buf.extend_with_bytes(&mut samples),
-                    AudioBufferRef::F64(buf) => buf.extend_with_bytes(&mut samples),
+                    AudioBufferRef::U8(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::U16(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::U24(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::U32(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::S8(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::S16(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::S24(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::S32(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::F32(buf) => buf.extend_with_bytes(&mut data),
+                    AudioBufferRef::F64(buf) => buf.extend_with_bytes(&mut data),
                 },
                 Err(Error::DecodeError(_)) => {
                     // Decode errors are not fatal. Print the error message and try to decode the next
@@ -147,7 +147,7 @@ impl proto::Audio {
 
         // send a raw decoded audio to the client
         Ok(proto::Audio {
-            samples,
+            data,
             sample_rate,
             sample_width,
             channels,
