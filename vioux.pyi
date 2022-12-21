@@ -16,3 +16,10 @@ async def request_audio() -> Tuple[bytearray, int, int, int]:
     """
     TODO
     """
+
+async def update_audio(
+    data: bytearray | bytes, sample_rate: int, sample_width: int, channels: int
+) -> None:
+    """
+    TODO
+    """

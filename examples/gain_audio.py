@@ -10,8 +10,6 @@ import pydub.playback
 
 
 async def main():
-    # a = pydub.AudioSegment.from_wav("tests/assets/sound.wav")
-
     audio = await vioux.request_audio()
 
     a = pydub.AudioSegment.from_raw(
@@ -21,7 +19,11 @@ async def main():
         channels=audio[3],
     )
 
-    pydub.playback.play(a)
+    await vioux.update_audio(
+        bytearray(a.raw_data), a.frame_rate, a.sample_width, a.channels
+    )
+
+    # pydub.playback.play(a)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ mod grpc;
 
 use pyo3::prelude::*;
 
-// used by main.rs
+// export because it's required by main.rs or/and tests/*
 pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
 pub use grpc::{
     proto::{Audio, ColorType, Image, RequestOptions},
@@ -19,6 +19,7 @@ fn vioux(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
 
     //
     m.add_function(wrap_pyfunction!(grpc::client::request_audio, m)?)?;
+    m.add_function(wrap_pyfunction!(grpc::client::update_audio, m)?)?;
 
     Ok(())
 }

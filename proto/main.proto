@@ -5,19 +5,27 @@ service Vioux {
   rpc RequestFrame(RequestOptions) returns (RequestedFrame);
 
   //
+  rpc UpdateFrame(RequestOptions) returns (UpdatedFrame);
+
+  //
   rpc RequestAudio(RequestOptions) returns (RequestedAudio);
 
   //
-  rpc UpdateFrame(RequestOptions) returns (UpdatedFrame);
+  rpc UpdateAudio(RequestOptions) returns (UpdatedAudio);
 }
 
-message RequestOptions { optional Image image = 1; }
+message RequestOptions {
+  optional Image image = 1;
+  optional Audio audio = 2;
+}
 
 message RequestedFrame { Image image = 1; }
 
+message UpdatedFrame {}
+
 message RequestedAudio { Audio audio = 1; }
 
-message UpdatedFrame {}
+message UpdatedAudio {}
 
 enum ColorType {
   L8 = 0;  // Pixel is 8-bit luminance
@@ -37,14 +45,16 @@ enum ColorType {
 }
 
 message Image {
-  bytes data = 1;
+  bytes data = 1; // data is always returned in bytes, it's the client's job to
+                  // convert to correct data type (e.g. from u8 to u16)
   ColorType color_type = 2;
   uint32 width = 3;
   uint32 height = 4;
 }
 
 message Audio {
-  bytes data = 1;
+  bytes data = 1; // data is always returned in bytes, it's the client's job to
+                  // convert to correct data type (e.g. from u8 to u16)
   uint32 sample_rate = 2;
   uint32 sample_width = 3;
   uint32 channels = 4;

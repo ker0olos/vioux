@@ -1,13 +1,8 @@
-use image::DynamicImage;
-
 use tonic::{Request, Response, Status};
 
-use super::{
-    image_types,
-    proto::{
-        vioux_server::Vioux, Audio, ColorType, Image, RequestOptions, RequestedAudio,
-        RequestedFrame, UpdatedFrame,
-    },
+use super::proto::{
+    vioux_server::Vioux, Audio, ColorType, Image, RequestOptions, RequestedAudio, RequestedFrame,
+    UpdatedAudio, UpdatedFrame,
 };
 
 #[derive(Default)]
@@ -42,85 +37,15 @@ impl Vioux for ViouxService {
         &self,
         request: Request<RequestOptions>,
     ) -> tonic::Result<Response<UpdatedFrame>> {
-        let image = request.into_inner().image;
+        let image = request
+            .into_inner()
+            .image
+            .and_then(|i| i.to_dynamic_image().ok());
+
+        // TODO
 
         match image {
-            Some(image) => {
-                let _image = match image.color_type() {
-                    ColorType::L8 => DynamicImage::from(
-                        image_types::GrayImage::from_raw(image.width, image.height, image.data)
-                            .unwrap(),
-                    ),
-                    ColorType::La8 => DynamicImage::from(
-                        image_types::GrayAlphaImage::from_raw(
-                            image.width,
-                            image.height,
-                            image.data,
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::Rgb8 => DynamicImage::from(
-                        image_types::RgbImage::from_raw(image.width, image.height, image.data)
-                            .unwrap(),
-                    ),
-                    ColorType::Rgba8 => DynamicImage::from(
-                        image_types::RgbaImage::from_raw(image.width, image.height, image.data)
-                            .unwrap(),
-                    ),
-                    ColorType::L16 => DynamicImage::from(
-                        image_types::Gray16Image::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::La16 => DynamicImage::from(
-                        image_types::GrayAlpha16Image::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::Rgb16 => DynamicImage::from(
-                        image_types::Rgb16Image::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::Rgba16 => DynamicImage::from(
-                        image_types::Rgba16Image::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::Rgb32F => DynamicImage::from(
-                        image_types::Rgb32FImage::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                    ColorType::Rgba32F => DynamicImage::from(
-                        image_types::Rgba32FImage::from_raw(
-                            image.width,
-                            image.height,
-                            bytemuck::cast_vec(image.data),
-                        )
-                        .unwrap(),
-                    ),
-                };
-
-                // TODO
-
-                Ok(Response::new(UpdatedFrame::default()))
-            }
+            Some(_image) => Ok(Response::new(UpdatedFrame::default())),
             None => Err(Status::new(tonic::Code::NotFound, "No image was received")),
         }
     }
@@ -138,6 +63,20 @@ impl Vioux for ViouxService {
             // send a raw decoded audio to the client
             Ok(audio) => Ok(Response::new(RequestedAudio { audio: Some(audio) })),
             Err(err) => Err(Status::new(tonic::Code::Aborted, err.to_string())),
+        }
+    }
+
+    async fn update_audio(
+        &self,
+        request: Request<RequestOptions>,
+    ) -> tonic::Result<Response<UpdatedAudio>> {
+        let audio = request.into_inner().audio;
+
+        // TODO
+
+        match audio {
+            Some(_image) => Ok(Response::new(UpdatedAudio::default())),
+            None => Err(Status::new(tonic::Code::NotFound, "No audio was received")),
         }
     }
 }

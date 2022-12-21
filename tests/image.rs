@@ -63,7 +63,7 @@ pub async fn test_update_frame() {
     });
 
     let response = service
-        .update_frame(tonic::Request::new(RequestOptions { image }))
+        .update_frame(tonic::Request::new(RequestOptions { image, audio: None }))
         .await;
 
     assert!(response.is_ok());

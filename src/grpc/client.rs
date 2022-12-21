@@ -1,7 +1,7 @@
 use pyo3::{prelude::*, types::PyByteArray};
 
 use super::{
-    proto::{vioux_client::ViouxClient, RequestOptions},
+    proto::{vioux_client::ViouxClient, Audio, RequestOptions},
     utils::{image_to_numpy, numpy_to_image},
 };
 
@@ -36,9 +36,11 @@ pub fn request_frame(py: Python) -> PyResult<&PyAny> {
 pub fn update_frame(py: Python, image: PyObject) -> PyResult<&PyAny> {
     let image = numpy_to_image(image, py)?;
 
-    let request = RequestOptions { image: Some(image) };
+    let request = RequestOptions {
+        image: Some(image),
+        audio: None,
+    };
 
-    // send the raw image to the server
     pyo3_asyncio::tokio::future_into_py(py, async {
         let mut client = connect().await;
         client.update_frame(request).await.expect("Request failed");
@@ -69,5 +71,32 @@ pub fn request_audio(py: Python) -> PyResult<&PyAny> {
                 audio.channels,
             )
         }))
+    })
+}
+
+#[pyfunction]
+pub fn update_audio(
+    py: Python,
+    data: Vec<u8>,
+    sample_rate: u32,
+    sample_width: u32,
+    channels: u32,
+) -> PyResult<&PyAny> {
+    let audio = Audio {
+        data,
+        sample_rate,
+        sample_width,
+        channels,
+    };
+
+    let request = RequestOptions {
+        audio: Some(audio),
+        image: None,
+    };
+
+    pyo3_asyncio::tokio::future_into_py(py, async {
+        let mut client = connect().await;
+        client.update_frame(request).await.expect("Request failed");
+        Ok(())
     })
 }
