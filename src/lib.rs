@@ -1,33 +1,25 @@
-mod schema;
+mod grpc;
 
-// pub use schema::placeholder;
-
-#[cfg(feature = "pybindings")]
 use pyo3::prelude::*;
 
-// TODO TEST
-/// A Python module implemented in Rust. The name of this function must match
-/// the `lib.name` setting in the `Cargo.toml`, else Python will not be able to
-/// import the module.
-///
-/// Run: maturin develop --features=pybindings
-#[pymodule]
-#[cfg(feature = "pybindings")]
-fn vioux(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
-    use pybindings::*;
+// export because it's required by main.rs or/and tests/*
+pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
+pub use grpc::{
+    proto::{Audio, ColorType, Image, RequestOptions},
+    server::ViouxService,
+};
 
-    m.add_function(wrap_pyfunction!(sum_as_string, m)?)?;
+#[pymodule]
+// must match the crate's name
+// used by the python scripting library
+fn vioux(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+    //
+    m.add_function(wrap_pyfunction!(grpc::client::request_frame, m)?)?;
+    m.add_function(wrap_pyfunction!(grpc::client::update_frame, m)?)?;
+
+    //
+    m.add_function(wrap_pyfunction!(grpc::client::request_audio, m)?)?;
+    m.add_function(wrap_pyfunction!(grpc::client::update_audio, m)?)?;
 
     Ok(())
-}
-
-#[cfg(feature = "pybindings")]
-mod pybindings {
-    use pyo3::prelude::*;
-
-    /// Formats the sum of two numbers as string.
-    #[pyfunction]
-    pub fn sum_as_string(a: usize, b: usize) -> PyResult<String> {
-        Ok((a + b).to_string())
-    }
 }

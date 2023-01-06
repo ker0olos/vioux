@@ -1,43 +1,55 @@
 [package]
-name = "vioux"
+name    = "vioux"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
 # The name of the native library. This is the name which will be used in Python to import the
-# library (i.e. `import string_sum`). If you change this, you must also change the name of the
-# `#[pymodule]` in `src/lib.rs`.
+# library (i.e. `import vioux`)
 name = "vioux"
 # "cdylib" is necessary to produce a shared library for Python to import from.
-#
 # Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
-# to `use string_sum;` unless the "rlib" or "lib" crate type is also included, e.g.:
-# crate-type = ["cdylib", "rlib"]
+# to `use vioux;` unless the "rlib" or "lib" included
 crate-type = ["cdylib", "rlib"]
-
+#
 doctest = false
 
+[profile.dev]
+lto = false
+
+# optimize for size
 [profile.release]
 codegen-units = 1
-opt-level = 3
-lto = true
-
-[profile.bench]
-codegen-units = 1
-opt-level = 3
-lto = true
+panic     = "abort"
+opt-level = "z"
+strip     = true 
+lto       = true
 
 [features]
 default     = ["desktop"]
 desktop     = ["dioxus/desktop"]
-pybindings  = ["pyo3/extension-module"]
 
 [dependencies]
-prost  = "0.11.0"
-pyo3   = { version = "0.17.1", optional = true  }
-dioxus = { version = "0.2.4",  optional = true  }
+tonic            = "0.8.3"
+prost            = "0.11.5"
+anyhow           = "1.0.68"
+numpy            = "0.17.2"
+bytemuck         = "1.12.3"
+dioxus       = { version = "0.2.4",  optional = true  }
+pyo3         = { version = "0.17.3", features = ["extension-module"]  }
+pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
+tokio        = { version = "1.24.0", features = ["macros", "rt-multi-thread"] }
+
+[dependencies.image]
+version  = "0.24.5"
+
+[dependencies.symphonia]
+version  = "0.5.1"
+features = ["all"]
+git = "https://github.com/pdeljanov/Symphonia"
 
 [dev-dependencies]
+md-5 = "0.10.5"
 
 [build-dependencies]
-prost-build = "0.11.1"
+tonic-build = "0.8.4"

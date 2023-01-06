@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+service Vioux {
+  //
+  rpc RequestFrame(RequestOptions) returns (RequestedFrame);
+
+  //
+  rpc UpdateFrame(RequestOptions) returns (UpdatedFrame);
+
+  //
+  rpc RequestAudio(RequestOptions) returns (RequestedAudio);
+
+  //
+  rpc UpdateAudio(RequestOptions) returns (UpdatedAudio);
+}
+
+message RequestOptions {
+  optional Image image = 1;
+  optional Audio audio = 2;
+}
+
+message RequestedFrame { Image image = 1; }
+
+message UpdatedFrame {}
+
+message RequestedAudio { Audio audio = 1; }
+
+message UpdatedAudio {}
+
+enum ColorType {
+  L8 = 0;  // Pixel is 8-bit luminance
+  La8 = 1; // Pixel is 8-bit luminance with an alpha channel
+
+  Rgb8 = 2;  // Pixel is 8-bit RGB
+  Rgba8 = 3; // Pixel is 8-bit RGB with an alpha channel
+
+  L16 = 4;  // Pixel is 16-bit luminance
+  La16 = 5; // Pixel is 16-bit luminance with an alpha channel
+
+  Rgb16 = 6;  // Pixel is 16-bit RGB
+  Rgba16 = 7; // Pixel is 16-bit RGBA
+
+  Rgb32F = 8;  // Pixel is 32-bit float RGB
+  Rgba32F = 9; // Pixel is 32-bit float RGBA
+}
+
+message Image {
+  bytes data = 1; // data is always returned in bytes, it's the client's job to
+                  // convert to correct data type (e.g. from u8 to u16)
+  ColorType color_type = 2;
+  uint32 width = 3;
+  uint32 height = 4;
+}
+
+message Audio {
+  bytes data = 1; // data is always returned in bytes, it's the client's job to
+                  // convert to correct data type (e.g. from u8 to u16)
+  uint32 sample_rate = 2;
+  uint32 sample_width = 3;
+  uint32 channels = 4;
+}
