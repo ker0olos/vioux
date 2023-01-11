@@ -33,7 +33,7 @@ desktop     = ["dioxus/desktop"]
 pybindings  = ["pyo3/extension-module"]
 
 [dependencies]
-prost  = "0.11.0"
+prost  = "0.11.6"
 pyo3   = { version = "0.17.1", optional = true  }
 dioxus = { version = "0.2.4",  optional = true  }
 
