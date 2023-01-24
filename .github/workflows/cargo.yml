@@ -1,10 +1,6 @@
-name: ci
+name: cargo
 
-on:
-  pull_request:
-  push:
-    branches:
-      - development
+on: [push]
 
 jobs:
   fmt:
@@ -14,9 +10,9 @@ jobs:
       - name: install rust stable
         uses: actions-rs/toolchain@v1
         with:
+          override: true
           profile: minimal
           toolchain: stable
-          override: true
           components: rustfmt
       - name: cargo fmt
         uses: actions-rs/cargo@v1
@@ -31,9 +27,9 @@ jobs:
       - name: install rust stable
         uses: actions-rs/toolchain@v1
         with:
+          override: true
           profile: minimal
           toolchain: stable
-          override: true
       - uses: arduino/setup-protoc@v1
       - name: cargo test
         uses: actions-rs/cargo@v1
@@ -48,9 +44,9 @@ jobs:
       - name: install rust stable
         uses: actions-rs/toolchain@v1
         with:
+          override: true
           profile: minimal
           toolchain: stable
-          override: true
           components: clippy
       - uses: arduino/setup-protoc@v1
       - name: cargo clippy

@@ -13,6 +13,7 @@ use symphonia::core::{
 
 pub mod client;
 pub mod server;
+
 mod utils;
 
 #[allow(clippy::all)]
