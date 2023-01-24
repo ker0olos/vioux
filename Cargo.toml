@@ -26,27 +26,24 @@ strip     = true
 lto       = true
 
 [features]
-default     = ["desktop"]
-desktop     = ["dioxus/desktop"]
+default     = []
 
 [dependencies]
 tonic            = "0.8.3"
-prost            = "0.11.5"
+prost            = "0.11.6"
 anyhow           = "1.0.68"
 numpy            = "0.17.2"
-bytemuck         = "1.12.3"
-dioxus       = { version = "0.2.4",  optional = true  }
+bytemuck         = "1.13.0"
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
 pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
-tokio        = { version = "1.24.0", features = ["macros", "rt-multi-thread"] }
+tokio        = { version = "1.24.2", features = ["macros", "rt-multi-thread"] }
 
 [dependencies.image]
 version  = "0.24.5"
 
 [dependencies.symphonia]
-version  = "0.5.1"
+version  = "0.5.2"
 features = ["all"]
-git = "https://github.com/pdeljanov/Symphonia"
 
 [dev-dependencies]
 md-5 = "0.10.5"

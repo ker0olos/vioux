@@ -21,7 +21,7 @@ I been using kdenlive for a while now, but it's UI is unfriendly (like everythin
 
 The app is built with rust for speed, cross-platform, multithreading, etc.
 
-The UI uses [dioxus](https://github.com/DioxusLabs/dioxus) which is a react-like GUI library that uses webview, because css is the best human innovation since fire and [iced](https://github.com/iced-rs/iced) is not yet production-ready.
+<!-- The UI uses [dioxus](https://github.com/DioxusLabs/dioxus) which is a react-like GUI library that uses webview, because css is the best human innovation since fire and [iced](https://github.com/iced-rs/iced) is not yet production-ready. -->
 
 Scripts [plugins] connect with vioux through a local gRPC server.
 
