@@ -36,7 +36,7 @@ numpy            = "0.17.2"
 bytemuck         = "1.13.0"
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
 pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
-tokio        = { version = "1.24.2", features = ["macros", "rt-multi-thread"] }
+tokio        = { version = "1.25.0", features = ["macros", "rt-multi-thread"] }
 
 [dependencies.image]
 version  = "0.24.5"
