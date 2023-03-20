@@ -31,7 +31,7 @@ default     = []
 [dependencies]
 tonic            = "0.8.3"
 prost            = "0.11.6"
-anyhow           = "1.0.68"
+anyhow           = "1.0.70"
 numpy            = "0.17.2"
 bytemuck         = "1.13.0"
 pyo3         = { version = "0.17.3", features = ["extension-module"]  }
