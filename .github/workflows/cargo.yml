@@ -32,7 +32,8 @@ jobs:
           toolchain: stable
       - uses: arduino/setup-protoc@v1
       - name: install libv
-        run: sudo apt-get update && apt-get install -y ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+        ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
       - name: cargo test
         uses: actions-rs/cargo@v1
         with:
@@ -52,7 +53,8 @@ jobs:
           components: clippy
       - uses: arduino/setup-protoc@v1
       - name: install libv
-        run: sudo apt-get update && apt-get install -y ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends \
+        ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
       - name: cargo clippy
         uses: actions-rs/cargo@v1
         with:
