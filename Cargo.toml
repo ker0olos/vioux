@@ -1,5 +1,5 @@
 [package]
-name    = "vioux"
+name = "vioux"
 version = "0.1.0"
 edition = "2021"
 
@@ -20,33 +20,38 @@ lto = false
 # optimize for size
 [profile.release]
 codegen-units = 1
-panic     = "abort"
+panic = "abort"
 opt-level = "z"
-strip     = true 
-lto       = true
+strip = true
+lto = true
 
 [features]
-default     = []
+default = []
 
 [dependencies]
-tonic            = "0.8.3"
-prost            = "0.11.6"
-anyhow           = "1.0.68"
-numpy            = "0.17.2"
-bytemuck         = "1.13.0"
-pyo3         = { version = "0.17.3", features = ["extension-module"]  }
-pyo3-asyncio = { version = "0.17", features = ["attributes", "tokio-runtime"] }
-tokio        = { version = "1.24.2", features = ["macros", "rt-multi-thread"] }
+tonic = "0.10.0"
+prost = "0.12.1"
+anyhow = "1.0.68"
+numpy = "0.19.0"
+bytemuck = "1.13.0"
+pyo3 = { version = "0.19.2", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.19.0", features = [
+    "attributes",
+    "tokio-runtime",
+] }
+tokio = { version = "1.24.2", features = ["macros", "rt-multi-thread"] }
+video-rs = "0.4.1"
 
 [dependencies.image]
-version  = "0.24.5"
+version = "0.24.5"
 
 [dependencies.symphonia]
-version  = "0.5.2"
+version = "0.5.2"
 features = ["all"]
 
+# used in cargo tests to compare images 
 [dev-dependencies]
 md-5 = "0.10.5"
 
 [build-dependencies]
-tonic-build = "0.8.4"
+tonic-build = "0.10.0"

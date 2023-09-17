@@ -3,6 +3,7 @@
 # vioux
 
 A proof-of-concept for a scripting-based video editor
+
 </div>
 
 ## Proof of concept
@@ -33,3 +34,13 @@ Any script (in any language) can technically connect to the [gRPC] server. But o
 With that in mind, python will always be easiest option with a lot of support out of the box.
 
 You will have access to a library full of helper utilities. Including functions that automatically connects the the server, so users can avoid all direct contact with the grpc-related apis. The library also comes with many functions that do popular image and audio processing tasks like rotation, translation, and gaining.
+
+## Dev
+
+
+```bash
+pip install maturin
+maturin build
+pip install {maturin_output.whi}
+cargo run 
+```

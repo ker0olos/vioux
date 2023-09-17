@@ -1,13 +1,7 @@
 [build-system]
-requires = ["maturin>=0.13,<0.14"]
+requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
-
-[project]
-name = "vioux"
-requires-python = ">=3.7"
 
 [tool.isort]
 profile = "black"
 length_sort = true
-
-dependencies = ["cffi"]
