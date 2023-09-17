@@ -96,7 +96,7 @@ pub fn update_audio(
 
     pyo3_asyncio::tokio::future_into_py(py, async {
         let mut client = connect().await;
-        client.update_frame(request).await.expect("Request failed");
+        client.update_audio(request).await.expect("Request failed");
         Ok(())
     })
 }

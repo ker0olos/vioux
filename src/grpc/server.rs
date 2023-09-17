@@ -75,7 +75,7 @@ impl Vioux for ViouxService {
         // TODO
 
         match audio {
-            Some(_image) => Ok(Response::new(UpdatedAudio::default())),
+            Some(_) => Ok(Response::new(UpdatedAudio::default())),
             None => Err(Status::new(tonic::Code::NotFound, "No audio was received")),
         }
     }
