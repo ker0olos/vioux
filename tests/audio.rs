@@ -43,10 +43,15 @@ pub async fn test_update_audio() {
     let src = std::fs::File::open("tests/assets/sound.wav").unwrap();
 
     let audio = Audio::from_media_source(Box::new(src)).expect("failed to decode original file");
+
     let audio = Some(audio);
 
     let response = service
-        .update_audio(tonic::Request::new(RequestOptions { audio, image: None }))
+        .update_audio(tonic::Request::new(RequestOptions {
+            audio,
+            n: None,
+            image: None,
+        }))
         .await;
 
     assert!(response.is_ok());

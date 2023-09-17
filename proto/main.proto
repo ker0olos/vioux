@@ -15,15 +15,21 @@ service Vioux {
 }
 
 message RequestOptions {
-  optional Image image = 1;
-  optional Audio audio = 2;
+  optional uint32 n = 1;
+  optional Image image = 2;
+  optional Audio audio = 3;
 }
 
-message RequestedFrame { Image image = 1; }
+message RequestedFrame { 
+  uint32 n = 1;
+  Image image = 2;
+}
 
 message UpdatedFrame {}
 
-message RequestedAudio { Audio audio = 1; }
+message RequestedAudio { 
+  Audio audio = 1;
+}
 
 message UpdatedAudio {}
 

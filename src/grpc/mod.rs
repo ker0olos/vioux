@@ -59,73 +59,73 @@ impl proto::ColorType {
 }
 
 impl proto::Image {
-    pub fn to_dynamic_image(self) -> anyhow::Result<image::DynamicImage> {
-        let result = match self.color_type() {
-            proto::ColorType::L8 => image::DynamicImage::from(
-                image_types::GrayImage::from_raw(self.width, self.height, self.data).context("")?,
-            ),
-            proto::ColorType::La8 => image::DynamicImage::from(
-                image_types::GrayAlphaImage::from_raw(self.width, self.height, self.data)
-                    .context("")?,
-            ),
-            proto::ColorType::Rgb8 => image::DynamicImage::from(
-                image_types::RgbImage::from_raw(self.width, self.height, self.data).context("")?,
-            ),
-            proto::ColorType::Rgba8 => image::DynamicImage::from(
-                image_types::RgbaImage::from_raw(self.width, self.height, self.data).context("")?,
-            ),
-            proto::ColorType::L16 => image::DynamicImage::from(
-                image_types::Gray16Image::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-            proto::ColorType::La16 => image::DynamicImage::from(
-                image_types::GrayAlpha16Image::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-            proto::ColorType::Rgb16 => image::DynamicImage::from(
-                image_types::Rgb16Image::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-            proto::ColorType::Rgba16 => image::DynamicImage::from(
-                image_types::Rgba16Image::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-            proto::ColorType::Rgb32F => image::DynamicImage::from(
-                image_types::Rgb32FImage::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-            proto::ColorType::Rgba32F => image::DynamicImage::from(
-                image_types::Rgba32FImage::from_raw(
-                    self.width,
-                    self.height,
-                    bytemuck::cast_vec(self.data),
-                )
-                .context("")?,
-            ),
-        };
+    // pub fn to_dynamic_image(self) -> anyhow::Result<image::DynamicImage> {
+    //     let result = match self.color_type() {
+    //         proto::ColorType::L8 => image::DynamicImage::from(
+    //             image_types::GrayImage::from_raw(self.width, self.height, self.data).context("")?,
+    //         ),
+    //         proto::ColorType::La8 => image::DynamicImage::from(
+    //             image_types::GrayAlphaImage::from_raw(self.width, self.height, self.data)
+    //                 .context("")?,
+    //         ),
+    //         proto::ColorType::Rgb8 => image::DynamicImage::from(
+    //             image_types::RgbImage::from_raw(self.width, self.height, self.data).context("")?,
+    //         ),
+    //         proto::ColorType::Rgba8 => image::DynamicImage::from(
+    //             image_types::RgbaImage::from_raw(self.width, self.height, self.data).context("")?,
+    //         ),
+    //         proto::ColorType::L16 => image::DynamicImage::from(
+    //             image_types::Gray16Image::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //         proto::ColorType::La16 => image::DynamicImage::from(
+    //             image_types::GrayAlpha16Image::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //         proto::ColorType::Rgb16 => image::DynamicImage::from(
+    //             image_types::Rgb16Image::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //         proto::ColorType::Rgba16 => image::DynamicImage::from(
+    //             image_types::Rgba16Image::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //         proto::ColorType::Rgb32F => image::DynamicImage::from(
+    //             image_types::Rgb32FImage::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //         proto::ColorType::Rgba32F => image::DynamicImage::from(
+    //             image_types::Rgba32FImage::from_raw(
+    //                 self.width,
+    //                 self.height,
+    //                 bytemuck::cast_vec(self.data),
+    //             )
+    //             .context("")?,
+    //         ),
+    //     };
 
-        Ok(result)
-    }
+    //     Ok(result)
+    // }
 }
 
 impl proto::Audio {

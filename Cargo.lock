@@ -1944,6 +1944,7 @@ dependencies = [
  "anyhow",
  "bytemuck",
  "image",
+ "lazy_static",
  "md-5",
  "numpy",
  "prost",

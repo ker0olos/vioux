@@ -34,7 +34,11 @@ pub async fn test_request_frame() {
     let service = ViouxService::default();
 
     let response = service
-        .request_frame(tonic::Request::new(RequestOptions::default()))
+        .request_frame(tonic::Request::new(RequestOptions {
+            n: Some(0),
+            image: None,
+            audio: None,
+        }))
         .await
         .unwrap();
 
@@ -63,7 +67,11 @@ pub async fn test_update_frame() {
     });
 
     let response = service
-        .update_frame(tonic::Request::new(RequestOptions { image, audio: None }))
+        .update_frame(tonic::Request::new(RequestOptions {
+            image,
+            n: Some(0),
+            audio: None,
+        }))
         .await;
 
     assert!(response.is_ok());
