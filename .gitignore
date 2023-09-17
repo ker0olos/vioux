@@ -7,3 +7,6 @@
 
 # Added by cargo
 /target
+
+# Python virtual environment
+.venv

@@ -37,10 +37,10 @@ You will have access to a library full of helper utilities. Including functions 
 
 ## Dev
 
-
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
 pip install maturin
-maturin build
-pip install {maturin_output.whi}
-cargo run 
+maturin develop
+cargo run
 ```

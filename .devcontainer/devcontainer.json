@@ -4,8 +4,12 @@
     "ghcr.io/devcontainers/features/rust:1": {},
     "ghcr.io/devcontainers-contrib/features/protoc:1": {}
   },
-  "onCreateCommand": {
-    "apt": "apt-get update && apt-get install -y ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev",
-    "pip": "pip install maturin opencv-python pydub"
-  }
+  "onCreateCommand": [
+    // apt-get
+    "apt-get update && apt-get install -y ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev",
+    // create .venv
+    "python3 -m venv .venv",
+    // pip
+    ". .venv/bin/activate && pip install maturin opencv-python pydub && maturin develop"
+  ]
 }

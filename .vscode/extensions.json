@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "ms-python.black-formatter",
+        "rust-lang.rust-analyzer",
+        "ms-python.vscode-pylance",
+        "ms-python.python"
+    ]
+}
