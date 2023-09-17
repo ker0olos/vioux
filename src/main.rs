@@ -14,6 +14,7 @@ async fn main() -> anyhow::Result<()> {
     });
 
     loop {
+        // TODO should be used as the ui thread later
         std::thread::yield_now();
     }
 

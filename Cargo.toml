@@ -40,7 +40,6 @@ pyo3-asyncio = { version = "0.19.0", features = [
     "tokio-runtime",
 ] }
 tokio = { version = "1.24.2", features = ["macros", "rt-multi-thread"] }
-video-rs = "0.4.1"
 
 [dependencies.image]
 version = "0.24.5"
@@ -48,6 +47,10 @@ version = "0.24.5"
 [dependencies.symphonia]
 version = "0.5.2"
 features = ["all"]
+
+[dependencies.video-rs]
+version = "0.4.1"
+features = ["ndarray"]
 
 # used in cargo tests to compare images 
 [dev-dependencies]
