@@ -46,7 +46,7 @@ lazy_static = "1.4.0"
 version = "0.24.5"
 
 [dependencies.symphonia]
-version = "0.5.2"
+version = "0.5.3"
 features = ["all"]
 
 [dependencies.video-rs]
