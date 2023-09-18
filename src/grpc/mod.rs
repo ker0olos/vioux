@@ -167,10 +167,10 @@ impl proto::Audio {
             .map(|c| c.count() as u32)
             .context("no channel count")?;
 
-        // let frame_length = track
+        // let total_frames = track
         //     .codec_params
         //     .n_frames
-        //     .context("cannot calculate duration")?;
+        //     .context("cannot calculate total frames")?;
 
         let mut data = Vec::new();
 
@@ -222,6 +222,7 @@ impl proto::Audio {
             sample_rate,
             sample_width,
             channels,
+            // total_frames,
         })
     }
 }

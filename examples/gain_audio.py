@@ -1,30 +1,26 @@
-# import asyncio
+import asyncio
 
-# from io import BytesIO
-
-# import vioux
-
-# import pydub
-
-# import pydub.playback
+import vioux
 
 
-# async def main():
-#     audio = await vioux.request_audio()
+async def main():
+    audio = await vioux.request_audio(0)
 
-#     a = pydub.AudioSegment.from_raw(
-#         BytesIO(audio[0]),
-#         frame_rate=audio[1],
-#         sample_width=audio[2],
-#         channels=audio[3],
-#     )
+    # print(audio[4] / audio[2])
 
-#     await vioux.update_audio(
-#         bytearray(a.raw_data), a.frame_rate, a.sample_width, a.channels
-#     )
+    # a = pydub.AudioSegment.from_raw(
+    #     BytesIO(audio[0]),
+    #     frame_rate=audio[1],
+    #     sample_width=audio[2],
+    #     channels=audio[3],
+    # )
 
-#     # pydub.playback.play(a)
+    # await vioux.update_audio(
+    #     bytearray(a.raw_data), a.frame_rate, a.sample_width, a.channels
+    # )
+
+    # pydub.playback.play(a)
 
 
-# if __name__ == "__main__":
-#     asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

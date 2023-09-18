@@ -1,6 +1,6 @@
 use tonic::{Request, Response, Status};
 
-use crate::{render::export_to_mp4, store::FRAMES};
+use crate::store::{FRAMES, SEGMENTS};
 
 use super::proto::{
     vioux_server::Vioux, RequestOptions, RequestedAudio, RequestedFrame, UpdatedAudio, UpdatedFrame,
@@ -47,7 +47,7 @@ impl Vioux for ViouxService {
         if let Some(image) = request.image {
             if let Some(n) = request.n {
                 FRAMES.lock().unwrap().insert(n, image);
-                export_to_mp4();
+                // export_to_mp4();
                 Ok(Response::new(UpdatedFrame::default()))
             } else {
                 Err(Status::new(
@@ -62,36 +62,49 @@ impl Vioux for ViouxService {
 
     async fn request_audio(
         &self,
-        _request: Request<RequestOptions>,
+        request: Request<RequestOptions>,
     ) -> tonic::Result<Response<RequestedAudio>> {
-        // TODO
+        let request = request.into_inner();
 
-        // let src = std::fs::File::open("tests/assets/sound.wav").unwrap();
-
-        // let result = Audio::from_media_source(Box::new(src));
-
-        // match result {
-        //     // send a raw decoded audio to the client
-        //     Ok(audio) => Ok(Response::new(RequestedAudio { audio: Some(audio) })),
-        //     Err(err) => Err(Status::new(tonic::Code::Aborted, err.to_string())),
-        // }
-
-        todo!()
+        if let Some(n) = request.n {
+            if let Some(audio) = SEGMENTS.lock().unwrap().get(&n) {
+                Ok(Response::new(RequestedAudio {
+                    n,
+                    audio: Some(audio.clone()),
+                }))
+            } else {
+                Err(Status::new(
+                    tonic::Code::NotFound,
+                    "nth frame doesn't exist",
+                ))
+            }
+        } else {
+            Err(Status::new(
+                tonic::Code::NotFound,
+                "No nth frame was requested",
+            ))
+        }
     }
 
     async fn update_audio(
         &self,
-        _request: Request<RequestOptions>,
+        request: Request<RequestOptions>,
     ) -> tonic::Result<Response<UpdatedAudio>> {
-        // TODO
+        let request = request.into_inner();
 
-        // let audio = request.into_inner().audio;
-
-        // match audio {
-        //     Some(_) => Ok(Response::new(UpdatedAudio::default())),
-        //     None => Err(Status::new(tonic::Code::NotFound, "No audio was received")),
-        // }
-
-        todo!()
+        if let Some(audio) = request.audio {
+            if let Some(n) = request.n {
+                SEGMENTS.lock().unwrap().insert(n, audio);
+                // export_to_mp4();
+                Ok(Response::new(UpdatedAudio::default()))
+            } else {
+                Err(Status::new(
+                    tonic::Code::NotFound,
+                    "No nth frame was received",
+                ))
+            }
+        } else {
+            Err(Status::new(tonic::Code::NotFound, "No audio was received"))
+        }
     }
 }

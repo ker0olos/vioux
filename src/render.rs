@@ -27,8 +27,10 @@ pub(crate) fn export_to_mp4() {
         //     .to_rgb8()
         //     .into_raw();
         // let frame = Array3::from_shape_vec((height, width, 3), raw_pixels.clone()).unwrap();
+
         // TODO NOTE check color type
         // TODO not all frames will have the canvas width and height
+
         let frame = Array3::from_shape_vec((height, width, 3), image.data.clone()).unwrap();
 
         encoder
