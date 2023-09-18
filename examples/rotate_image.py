@@ -12,7 +12,7 @@ async def main():
 
     # image = cv2.flip(image, -1)
 
-    # await vioux.update_frame(0, image)
+    await vioux.update_frame(1, image)
 
     # cv2.imshow("cv2", image)
     # cv2.waitKey(0)

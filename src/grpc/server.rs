@@ -1,6 +1,6 @@
 use tonic::{Request, Response, Status};
 
-use super::super::FRAMES;
+use crate::{render::export_to_mp4, store::FRAMES};
 
 use super::proto::{
     vioux_server::Vioux, RequestOptions, RequestedAudio, RequestedFrame, UpdatedAudio, UpdatedFrame,
@@ -47,6 +47,7 @@ impl Vioux for ViouxService {
         if let Some(image) = request.image {
             if let Some(n) = request.n {
                 FRAMES.lock().unwrap().insert(n, image);
+                export_to_mp4();
                 Ok(Response::new(UpdatedFrame::default()))
             } else {
                 Err(Status::new(

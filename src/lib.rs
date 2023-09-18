@@ -1,4 +1,5 @@
 mod grpc;
+mod render;
 mod store;
 
 use pyo3::prelude::*;
@@ -9,10 +10,6 @@ pub use grpc::{
     proto::{Audio, ColorType, Image, RequestOptions},
     server::ViouxService,
 };
-
-// TODO REMOVE
-pub use store::FRAMES;
-//
 
 #[pymodule]
 // must match the crate's name
