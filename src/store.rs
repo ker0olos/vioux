@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Mutex};
 use super::grpc::proto::{Audio, Image};
 
 lazy_static::lazy_static! {
-    pub(crate) static ref FRAMES: Mutex<HashMap<u64, Image>> = {
+    pub static ref FRAMES: Mutex<HashMap<u64, Image>> = {
         // TODO REMOVE
         let mut m = HashMap::new();
 
@@ -27,7 +27,7 @@ lazy_static::lazy_static! {
         Mutex::new(m)
     };
 
-    pub(crate) static ref SEGMENTS: Mutex<HashMap<u64, Audio>> = {
+    pub static ref SEGMENTS: Mutex<HashMap<u64, Audio>> = {
         // TODO REMOVE
         let mut m = HashMap::new();
 

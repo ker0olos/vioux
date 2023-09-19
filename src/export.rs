@@ -1,18 +1,21 @@
 use numpy::ndarray::Array3;
+
 use std::path::PathBuf;
+
 use video_rs::{Encoder, EncoderSettings, Locator, Time};
 
 use super::store::FRAMES;
 
-pub(crate) fn export_to_mp4() {
+pub fn export_to_mp4() {
     video_rs::init().unwrap();
 
     let width = 512;
     let height = 512;
+    let filename = "output.mp4";
 
     let settings = EncoderSettings::for_h264_yuv420p(width, height, false);
 
-    let destination: Locator = PathBuf::from("output.mp4").into();
+    let destination: Locator = PathBuf::from(filename).into();
     let mut encoder = Encoder::new(&destination, settings).expect("failed to create encoder");
 
     let duration: Time = Time::from_nth_of_a_second(24);

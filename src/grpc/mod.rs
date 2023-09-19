@@ -53,7 +53,7 @@ impl proto::ColorType {
             image::ColorType::Rgba16 => proto::ColorType::Rgba16,
             image::ColorType::Rgb32F => proto::ColorType::Rgb32F,
             image::ColorType::Rgba32F => proto::ColorType::Rgba32F,
-            _ => unreachable!(),
+            _ => unimplemented!(),
         }
     }
 }
@@ -167,10 +167,7 @@ impl proto::Audio {
             .map(|c| c.count() as u32)
             .context("no channel count")?;
 
-        // let total_frames = track
-        //     .codec_params
-        //     .n_frames
-        //     .context("cannot calculate total frames")?;
+        let codec = utils::codec_to_string(track.codec_params.codec).to_owned();
 
         let mut data = Vec::new();
 
@@ -222,7 +219,7 @@ impl proto::Audio {
             sample_rate,
             sample_width,
             channels,
-            // total_frames,
+            codec,
         })
     }
 }
@@ -240,7 +237,6 @@ macro_rules! impl_extend_with_bytes {
 
                 byte_buf.copy_interleaved(self);
 
-                // The interleaved samples can be accessed as a slice of bytes as follows.
                 let bytes = byte_buf.as_bytes();
 
                 samples.extend_from_slice(bytes);

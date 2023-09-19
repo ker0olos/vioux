@@ -1,4 +1,8 @@
 import asyncio
+from io import BytesIO
+
+from pydub import AudioSegment
+from pydub.playback import play
 
 import vioux
 
@@ -6,20 +10,18 @@ import vioux
 async def main():
     audio = await vioux.request_audio(0)
 
-    # print(audio[4] / audio[2])
+    print(audio[1], audio[2], audio[3], audio[4])
 
-    # a = pydub.AudioSegment.from_raw(
+    # t = AudioSegment.from_raw(
     #     BytesIO(audio[0]),
     #     frame_rate=audio[1],
     #     sample_width=audio[2],
     #     channels=audio[3],
     # )
 
-    # await vioux.update_audio(
-    #     bytearray(a.raw_data), a.frame_rate, a.sample_width, a.channels
-    # )
+    await vioux.update_audio(0, audio[0], audio[1], audio[2], audio[3], audio[4])
 
-    # pydub.playback.play(a)
+    # play(t)
 
 
 if __name__ == "__main__":

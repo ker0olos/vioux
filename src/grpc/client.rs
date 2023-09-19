@@ -78,6 +78,7 @@ pub fn request_audio(py: Python, n: u64) -> PyResult<&PyAny> {
                 audio.sample_rate,
                 audio.sample_width,
                 audio.channels,
+                audio.codec,
             )
         }))
     })
@@ -91,12 +92,14 @@ pub fn update_audio(
     sample_rate: u32,
     sample_width: u32,
     channels: u32,
+    codec: String,
 ) -> PyResult<&PyAny> {
     let audio = Audio {
         data,
         sample_rate,
         sample_width,
         channels,
+        codec,
     };
 
     let request = RequestOptions {

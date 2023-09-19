@@ -1,6 +1,6 @@
-import numpy
+from typing import Tuple
 
-# from typing import Tuple
+import numpy
 
 async def request_frame(n: int) -> numpy.ndarray:
     """
@@ -9,19 +9,22 @@ async def request_frame(n: int) -> numpy.ndarray:
 
 async def update_frame(n: int, image: numpy.ndarray) -> None:
     """
-    Upate a specific frame
+    Update a specific frame
     """
 
-# TODO
-# async def request_audio() -> Tuple[bytearray, int, int, int]:
-#     """
-#     TODO DOCS
-#     """
+async def request_audio(n: int) -> Tuple[bytearray, int, int, int]:
+    """
+    Return a specific audio segment
+    """
 
-# TODO
-# async def update_audio(
-#     data: bytearray | bytes, sample_rate: int, sample_width: int, channels: int
-# ) -> None:
-#     """
-#     TODO DOCS
-#     """
+async def update_audio(
+    n: int,
+    data: bytearray | bytes,
+    sample_rate: int,
+    sample_width: int,
+    channels: int,
+    codec: str,
+) -> None:
+    """
+    Update a specific audio segment
+    """

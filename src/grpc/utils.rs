@@ -8,6 +8,14 @@ use pyo3::{
     prelude::*,
     types::PyDict,
 };
+use symphonia::core::codecs::{
+    CodecType, CODEC_TYPE_PCM_ALAW, CODEC_TYPE_PCM_F32BE, CODEC_TYPE_PCM_F32LE,
+    CODEC_TYPE_PCM_F64BE, CODEC_TYPE_PCM_F64LE, CODEC_TYPE_PCM_MULAW, CODEC_TYPE_PCM_S16BE,
+    CODEC_TYPE_PCM_S16LE, CODEC_TYPE_PCM_S24BE, CODEC_TYPE_PCM_S24LE, CODEC_TYPE_PCM_S32BE,
+    CODEC_TYPE_PCM_S32LE, CODEC_TYPE_PCM_S8, CODEC_TYPE_PCM_U16BE, CODEC_TYPE_PCM_U16LE,
+    CODEC_TYPE_PCM_U24BE, CODEC_TYPE_PCM_U24LE, CODEC_TYPE_PCM_U32BE, CODEC_TYPE_PCM_U32LE,
+    CODEC_TYPE_PCM_U8,
+};
 
 use super::proto::{ColorType, Image};
 
@@ -123,4 +131,30 @@ pub fn numpy_to_image(ndarray: PyObject, py: Python) -> PyResult<Image> {
     };
 
     Ok(image)
+}
+
+pub fn codec_to_string(codec: CodecType) -> &'static str {
+    match codec {
+        CODEC_TYPE_PCM_S32LE => "pcm_s32le",
+        CODEC_TYPE_PCM_S32BE => "pcm_s32be",
+        CODEC_TYPE_PCM_S24LE => "pcm_s24le",
+        CODEC_TYPE_PCM_S24BE => "pcm_s24be",
+        CODEC_TYPE_PCM_S16LE => "pcm_s16le",
+        CODEC_TYPE_PCM_S16BE => "pcm_s16be",
+        CODEC_TYPE_PCM_S8 => "pcm_s8",
+        CODEC_TYPE_PCM_U32LE => "pcm_u32le",
+        CODEC_TYPE_PCM_U32BE => "pcm_u32be",
+        CODEC_TYPE_PCM_U24LE => "pcm_u24le",
+        CODEC_TYPE_PCM_U24BE => "pcm_u24be",
+        CODEC_TYPE_PCM_U16LE => "pcm_u16le",
+        CODEC_TYPE_PCM_U16BE => "pcm_u16be",
+        CODEC_TYPE_PCM_U8 => "pcm_u8",
+        CODEC_TYPE_PCM_F32LE => "pcm_f32le",
+        CODEC_TYPE_PCM_F32BE => "pcm_f32be",
+        CODEC_TYPE_PCM_F64LE => "pcm_f64le",
+        CODEC_TYPE_PCM_F64BE => "pcm_f64be",
+        CODEC_TYPE_PCM_ALAW => "pcm_alaw",
+        CODEC_TYPE_PCM_MULAW => "pcm_mulaw",
+        _ => unimplemented!(),
+    }
 }
