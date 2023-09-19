@@ -12,7 +12,7 @@ async def update_frame(n: int, image: numpy.ndarray) -> None:
     Update a specific frame
     """
 
-async def request_audio(n: int) -> Tuple[bytearray, int, int, int]:
+async def request_audio(n: int) -> Tuple[bytearray, int, int, int, str]:
     """
     Return a specific audio segment
     """

@@ -27,7 +27,11 @@ pub async fn test_request_audio() {
     let service = ViouxService::default();
 
     let response = service
-        .request_audio(tonic::Request::new(RequestOptions::default()))
+        .request_audio(tonic::Request::new(RequestOptions {
+            n: Some(0),
+            audio: None,
+            image: None,
+        }))
         .await
         .unwrap();
 
@@ -49,7 +53,7 @@ pub async fn test_update_audio() {
     let response = service
         .update_audio(tonic::Request::new(RequestOptions {
             audio,
-            n: None,
+            n: Some(0),
             image: None,
         }))
         .await;
