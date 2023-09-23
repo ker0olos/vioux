@@ -1,6 +1,7 @@
 mod export;
 mod grpc;
 mod store;
+mod ui;
 
 use pyo3::prelude::*;
 
@@ -10,6 +11,7 @@ pub use grpc::{
     proto::{Audio, ColorType, Image, RequestOptions},
     server::ViouxService,
 };
+pub use ui::App;
 //
 
 #[pymodule] // export to the python vioux library

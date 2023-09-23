@@ -1,4 +1,6 @@
-use vioux::{ViouxServer, ViouxService};
+use vioux::{App, ViouxServer, ViouxService};
+
+use iced::{Sandbox, Settings};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -6,6 +8,7 @@ async fn main() -> anyhow::Result<()> {
 
     let vioux_service_impl = ViouxService::default();
 
+    // Start gRPC server thread
     tokio::spawn(async move {
         tonic::transport::Server::builder()
             .add_service(ViouxServer::new(vioux_service_impl))
@@ -13,10 +16,6 @@ async fn main() -> anyhow::Result<()> {
             .await
     });
 
-    loop {
-        // TODO should be used as the ui thread later
-        std::thread::yield_now();
-    }
-
-    // Ok(())
+    // Start UI thread
+    App::run(Settings::default()).map_err(|e| e.into())
 }

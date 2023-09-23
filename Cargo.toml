@@ -53,6 +53,9 @@ features = ["all"]
 version = "0.4.1"
 features = ["ndarray"]
 
+[dependencies.iced]
+version = "0.10.0"
+
 # used in cargo tests to compare images 
 [dev-dependencies]
 md-5 = "0.10.5"

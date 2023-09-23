@@ -6,7 +6,7 @@ use video_rs::{Encoder, EncoderSettings, Time};
 
 use super::store::{FRAMES, SEGMENTS};
 
-pub fn export_to_mp3() -> Result<(), anyhow::Error> {
+pub(crate) fn export_to_mp3() -> Result<(), anyhow::Error> {
     let segments = SEGMENTS.lock().unwrap();
 
     let seg = segments.get(&0).unwrap();
@@ -44,7 +44,7 @@ pub fn export_to_mp3() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-fn add_audio_to_video() {
+pub(crate) fn add_audio_to_video() {
     // TODO untested
     // TODO use ffmpeg-next
     let mut child = std::process::Command::new("ffmpeg")
@@ -76,7 +76,7 @@ fn add_audio_to_video() {
     child.wait().unwrap();
 }
 
-pub fn export_to_mp4() {
+pub(crate) fn export_to_mp4() {
     video_rs::init().expect("falied to initialize video-rs");
 
     let canvas_width = 512;
