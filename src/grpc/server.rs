@@ -47,7 +47,7 @@ impl Vioux for ViouxService {
         if let Some(image) = request.image {
             if let Some(n) = request.n {
                 FRAMES.lock().unwrap().insert(n, image);
-                // export_to_mp4();
+
                 Ok(Response::new(UpdatedFrame::default()))
             } else {
                 Err(Status::new(
@@ -95,7 +95,7 @@ impl Vioux for ViouxService {
         if let Some(audio) = request.audio {
             if let Some(n) = request.n {
                 SEGMENTS.lock().unwrap().insert(n, audio);
-                // export_to_mp4();
+
                 Ok(Response::new(UpdatedAudio::default()))
             } else {
                 Err(Status::new(

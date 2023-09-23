@@ -1,48 +1,119 @@
 use numpy::ndarray::Array3;
 
-use std::path::PathBuf;
+use std::{io::Write, path::PathBuf};
 
-use video_rs::{Encoder, EncoderSettings, Locator, Time};
+use video_rs::{Encoder, EncoderSettings, Time};
 
-use super::store::FRAMES;
+use super::store::{FRAMES, SEGMENTS};
+
+pub fn export_to_mp3() -> Result<(), anyhow::Error> {
+    let segments = SEGMENTS.lock().unwrap();
+
+    let seg = segments.get(&0).unwrap();
+
+    // TODO use ffmpeg-next
+    let mut child = std::process::Command::new("ffmpeg")
+        // format
+        .arg("-f")
+        .arg(format!("{}", &seg.codec[4..]))
+        // codec
+        .arg("-acodec")
+        .arg(format!("{}", &seg.codec))
+        //  sample rate
+        .arg("-ar")
+        .arg(format!("{}", &seg.sample_rate))
+        // channels
+        .arg("-ac")
+        .arg(format!("{}", &seg.channels))
+        //
+        .arg("-i")
+        .arg("-") // input data from stdin
+        .arg("-f")
+        .arg("wav") // output format
+        .arg("output.wav") // output filename
+        .stdin(std::process::Stdio::piped())
+        .spawn()
+        .expect("Failed to start ffmpeg");
+
+    // Write the raw audio data to ffmpeg's stdin
+    child.stdin.as_mut().unwrap().write_all(&seg.data).unwrap();
+
+    // Wait for ffmpeg to finish
+    child.wait().unwrap();
+
+    Ok(())
+}
+
+fn add_audio_to_video() {
+    // TODO untested
+    // TODO use ffmpeg-next
+    let mut child = std::process::Command::new("ffmpeg")
+        .arg("-i")
+        .arg("video.mp4")
+        // sets an offset of 30 seconds for the next input file.
+        // This means the audio will start playing nth seconds into the video.
+        .arg("-itsoffset")
+        .arg("-00:00:30")
+        //
+        .arg("-i")
+        .arg("audio.mp3")
+        // [0:a][1:a] selects the audio streams from the first and second input files
+        // [a] the name of the output audio stream
+        .arg("-filter_complex")
+        .arg("\"[0:a][1:a]amerge=inputs=2[a]\"")
+        .arg("-map 0:v -map \"[a]\"")
+        // ensures that the video stream is copied without re-encoding
+        .arg("-c:v")
+        .arg("copy")
+        // stop encoding when the shortest input stream ends
+        .arg("-shortest")
+        //
+        .arg("output.mp4")
+        .spawn()
+        .expect("Failed to start ffmpeg");
+
+    // Wait for ffmpeg to finish
+    child.wait().unwrap();
+}
 
 pub fn export_to_mp4() {
-    video_rs::init().unwrap();
+    video_rs::init().expect("falied to initialize video-rs");
 
-    let width = 512;
-    let height = 512;
+    let canvas_width = 512;
+    let canvas_height = 512;
+
     let filename = "output.mp4";
 
-    let settings = EncoderSettings::for_h264_yuv420p(width, height, false);
+    let settings = EncoderSettings::for_h264_yuv420p(canvas_width, canvas_height, false);
 
-    let destination: Locator = PathBuf::from(filename).into();
-    let mut encoder = Encoder::new(&destination, settings).expect("failed to create encoder");
+    let destination = PathBuf::from(filename);
 
-    let duration: Time = Time::from_nth_of_a_second(24);
+    let mut encoder =
+        Encoder::new(&destination.into(), settings).expect("failed to create video encoder");
 
-    let mut position = Time::zero();
+    let frames_per_second = 30;
+
+    let frame_duration: Time = Time::from_nth_of_a_second(frames_per_second);
+
+    let mut insert_timestamp = Time::zero();
 
     for image in FRAMES.lock().unwrap().values() {
-        // let raw_pixels = image
-        //     .clone()
-        //     .to_dynamic_image()
-        //     .unwrap()
-        //     .to_rgb8()
-        //     .into_raw();
-        // let frame = Array3::from_shape_vec((height, width, 3), raw_pixels.clone()).unwrap();
+        let img = image
+            .clone()
+            .to_dynamic_image()
+            .expect("failed to convert image to dynamic image");
 
-        // TODO NOTE check color type
-        // TODO not all frames will have the canvas width and height
-
-        let frame = Array3::from_shape_vec((height, width, 3), image.data.clone()).unwrap();
+        let frame =
+            Array3::from_shape_vec((canvas_height, canvas_width, 3), img.to_rgb8().into_raw())
+                .expect("failed to convert dynamic image to ndarray");
 
         encoder
-            .encode(&frame.into(), &position)
+            .encode(&frame.into(), &insert_timestamp)
             .expect("failed to encode frame");
 
-        // Update the current position
-        position = position.aligned_with(&duration).add();
+        // add the frame duration to the timestamp
+        insert_timestamp = insert_timestamp.aligned_with(&frame_duration).add();
     }
 
-    encoder.finish().expect("failed to finish encoder");
+    encoder.finish().expect("failed to finish encode video");
 }
