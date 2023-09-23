@@ -8,53 +8,31 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install rust stable
-        uses: actions-rs/toolchain@v1
+        uses: hecrj/setup-rust-action@v1
         with:
-          override: true
-          profile: minimal
-          toolchain: stable
           components: rustfmt
-      - name: cargo fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+      - run: cargo fmt --all -- --check
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          override: true
-          profile: minimal
-          toolchain: stable
       - uses: arduino/setup-protoc@v1
+      - name: install rust stable
+        uses: hecrj/setup-rust-action@v1
       - name: install libv
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --no-default-features
+      - run: cargo test --no-default-features
 
   clippy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: install rust stable
-        uses: actions-rs/toolchain@v1
-        with:
-          override: true
-          profile: minimal
-          toolchain: stable
-          components: clippy
       - uses: arduino/setup-protoc@v1
+      - name: install rust stable
+        uses: hecrj/setup-rust-action@v1
+        with:
+          components: clippy
       - name: install libv
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
-      - name: cargo clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --no-default-features
+      - run: cargo clippy --no-default-features
