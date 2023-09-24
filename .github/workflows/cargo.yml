@@ -1,16 +1,25 @@
 name: cargo
 
-on: [push]
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: install rust stable
-        uses: hecrj/setup-rust-action@v1
+        uses: actions-rs/toolchain@v1
         with:
+          override: true
+          profile: minimal
+          toolchain: stable
           components: rustfmt
+      
       - run: cargo fmt --all -- --check
 
   test:
@@ -18,21 +27,34 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: arduino/setup-protoc@v1
+      
       - name: install rust stable
-        uses: hecrj/setup-rust-action@v1
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          profile: minimal
+          toolchain: stable
+      
       - name: install libv
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
-      - run: cargo test --no-default-features
+      
+      - run: cargo test
 
   clippy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: arduino/setup-protoc@v1
+      
       - name: install rust stable
-        uses: hecrj/setup-rust-action@v1
+        uses: actions-rs/toolchain@v1
         with:
+          override: true
+          profile: minimal
+          toolchain: stable
           components: clippy
+      
       - name: install libv
         run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg libavutil-dev libavformat-dev libavfilter-dev libavcodec-dev libavdevice-dev libpostproc-dev libswresample-dev libswscale-dev
-      - run: cargo clippy --no-default-features
+      
+      - run: cargo clippy

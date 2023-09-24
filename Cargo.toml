@@ -1,65 +1,15 @@
-[package]
-name = "vioux"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
 
-[lib]
-# The name of the native library. This is the name which will be used in Python to import the
-# library (i.e. `import vioux`)
-name = "vioux"
-# "cdylib" is necessary to produce a shared library for Python to import from.
-# Downstream Rust code (including code in `bin/`, `examples/`, and `tests/`) will not be able
-# to `use vioux;` unless the "rlib" or "lib" included
-crate-type = ["cdylib", "rlib"]
-#
-doctest = false
+members = ["vioux_gui", "vioux_lib"]
+
 
 [profile.dev]
 lto = false
 
-# optimize for size
 [profile.release]
 codegen-units = 1
 panic = "abort"
 opt-level = "z"
 strip = true
 lto = true
-
-[features]
-default = []
-
-[dependencies]
-tonic = "0.10.0"
-prost = "0.12.1"
-anyhow = "1.0.75"
-numpy = "0.19.0"
-bytemuck = "1.14.0"
-lazy_static = "1.4.0"
-tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
-pyo3 = { version = "0.19.2", features = ["extension-module"] }
-pyo3-asyncio = { version = "0.19.0", features = [
-    "attributes",
-    "tokio-runtime",
-] }
-
-[dependencies.image]
-version = "0.24.7"
-
-[dependencies.symphonia]
-version = "0.5.3"
-features = ["all"]
-
-[dependencies.video-rs]
-version = "0.4.1"
-features = ["ndarray"]
-
-[dependencies.iced]
-version = "0.10.0"
-
-# used in cargo tests to compare images 
-[dev-dependencies]
-md-5 = "0.10.5"
-
-#
-[build-dependencies]
-tonic-build = "0.10.0"

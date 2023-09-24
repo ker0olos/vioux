@@ -27,6 +27,6 @@
   },
   "explorer.fileNesting.patterns": {
     "README.md": "LICENSE,.gitignore",
-    "Cargo.toml": "rustfmt.toml,pyproject.toml,Cargo.lock"
+    "Cargo.toml": "Cargo.lock"
   },
 }

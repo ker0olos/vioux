@@ -4,7 +4,8 @@ use md5::{Digest, Md5};
 use vioux::{ColorType, Image, RequestOptions, Vioux, ViouxService};
 
 fn compare_images(file_name: &str, requested_image: Image) {
-    let image_path = PathBuf::from(format!("tests/assets/{}", file_name));
+    let image_path =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("tests/assets/{}", file_name));
 
     let loaded_image = image::io::Reader::open(image_path)
         .unwrap()
@@ -51,10 +52,9 @@ pub async fn test_request_frame() {
 pub async fn test_update_frame() {
     let service = ViouxService::default();
 
-    let image = image::io::Reader::open("tests/assets/img.jpeg")
-        .unwrap()
-        .decode()
-        .unwrap();
+    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/assets/img.jpeg");
+
+    let image = image::io::Reader::open(path).unwrap().decode().unwrap();
 
     let color_type = ColorType::from(image.color());
 
@@ -64,6 +64,8 @@ pub async fn test_update_frame() {
         height: image.height(),
         data: image.into_bytes(),
         color_type: color_type.into(),
+        x: 0,
+        y: 0,
     });
 
     let response = service

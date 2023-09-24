@@ -1,0 +1,52 @@
+[package]
+name = "vioux"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+# The name of the native library.
+# This is the name which will be used in python
+# library (import vioux)
+name = "vioux"
+# "cdylib" is required to "import vioux" in python
+# vioux_gui requires `"rlib" to "use vioux"
+crate-type = ["cdylib", "rlib"]
+#
+doctest = false
+
+
+[dependencies]
+tonic = "0.10.0"
+prost = "0.12.1"
+anyhow = "1.0.75"
+numpy = "0.19.0"
+bytemuck = "1.14.0"
+lazy_static = "1.4.0"
+serde = "1.0.188"
+confy = "0.5.1"
+uuid = { version = "1.4.1", features = ["v4", "fast-rng"] }
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+pyo3 = { version = "0.19.2", features = ["extension-module"] }
+pyo3-asyncio = { version = "0.19.0", features = [
+    "attributes",
+    "tokio-runtime",
+] }
+
+[dependencies.image]
+version = "0.24.7"
+
+[dependencies.symphonia]
+version = "0.5.3"
+features = ["all"]
+
+[dependencies.video-rs]
+version = "0.4.1"
+features = ["ndarray"]
+
+# used in cargo tests to compare images 
+[dev-dependencies]
+md-5 = "0.10.5"
+
+#
+[build-dependencies]
+tonic-build = "0.10.0"

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Mutex};
+use std::{collections::HashMap, path::PathBuf, sync::Mutex};
 
 use super::grpc::proto::{Audio, Image};
 
@@ -7,7 +7,9 @@ lazy_static::lazy_static! {
         // TODO REMOVE
         let mut m = HashMap::new();
 
-        let image = image::io::Reader::open("tests/assets/img.jpeg")
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/assets/img.jpeg");
+
+        let image = image::io::Reader::open(path)
             .unwrap()
             .decode()
             .unwrap();
@@ -21,6 +23,8 @@ lazy_static::lazy_static! {
                 height: image.height(),
                 color_type: color_type.into(),
                 data: image.into_bytes(),
+                x: 0,
+                y: 0
             },
         );
 
@@ -31,7 +35,9 @@ lazy_static::lazy_static! {
         // TODO REMOVE
         let mut m = HashMap::new();
 
-        let src = std::fs::File::open("tests/assets/sound.wav")
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/assets/sound.wav");
+
+        let src = std::fs::File::open(path)
             .unwrap();
 
         m.insert(

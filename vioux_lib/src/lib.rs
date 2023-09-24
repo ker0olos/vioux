@@ -1,18 +1,17 @@
 mod export;
 mod grpc;
 mod store;
-mod ui;
 
-use pyo3::prelude::*;
-
-// NOTE export because it's required by main.rs or/and tests/*
+//
+pub use export::{export_to_mp3, export_to_mp4};
 pub use grpc::proto::vioux_server::{Vioux, ViouxServer};
 pub use grpc::{
     proto::{Audio, ColorType, Image, RequestOptions},
     server::ViouxService,
 };
-pub use ui::App;
 //
+
+use pyo3::prelude::*;
 
 #[pymodule] // export to the python vioux library
 fn vioux(_py: Python<'_>, m: &PyModule) -> PyResult<()> {

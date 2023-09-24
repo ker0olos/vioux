@@ -7,7 +7,7 @@ async def request_frame(n: int) -> numpy.ndarray:
     Return a specific frame
     """
 
-async def update_frame(n: int, image: numpy.ndarray) -> None:
+async def update_frame(n: int, image: numpy.ndarray, x: int, y: int) -> None:
     """
     Update a specific frame
     """

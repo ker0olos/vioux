@@ -36,10 +36,10 @@ the grpc-related APIs.
 
 ## Development
 
-```bash
+```sh
 python3 -m venv .venv
 . .venv/bin/activate
 pip install maturin
-maturin develop
+cd vioux_lib && maturin develop
 cargo run
 ```

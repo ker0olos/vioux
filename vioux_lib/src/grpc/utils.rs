@@ -65,7 +65,7 @@ pub fn image_to_numpy(image: Image, py: Python) -> PyResult<PyObject> {
     }
 }
 
-pub fn numpy_to_image(ndarray: PyObject, py: Python) -> PyResult<Image> {
+pub fn numpy_to_image(ndarray: PyObject, py: Python, x: u32, y: u32) -> PyResult<Image> {
     let binding = ndarray.getattr(py, "__array_interface__")?;
     let interface = binding.extract::<&PyDict>(py)?;
 
@@ -128,6 +128,8 @@ pub fn numpy_to_image(ndarray: PyObject, py: Python) -> PyResult<Image> {
         width: shape.1 as u32,
         height: shape.0 as u32,
         color_type: color_type.into(),
+        x,
+        y,
     };
 
     Ok(image)

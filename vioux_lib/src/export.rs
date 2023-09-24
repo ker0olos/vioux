@@ -6,7 +6,7 @@ use video_rs::{Encoder, EncoderSettings, Time};
 
 use super::store::{FRAMES, SEGMENTS};
 
-pub(crate) fn export_to_mp3() -> Result<(), anyhow::Error> {
+pub fn export_to_mp3() -> Result<(), anyhow::Error> {
     let segments = SEGMENTS.lock().unwrap();
 
     let seg = segments.get(&0).unwrap();
@@ -44,39 +44,39 @@ pub(crate) fn export_to_mp3() -> Result<(), anyhow::Error> {
     Ok(())
 }
 
-pub(crate) fn add_audio_to_video() {
-    // TODO untested
-    // TODO use ffmpeg-next
-    let mut child = std::process::Command::new("ffmpeg")
-        .arg("-i")
-        .arg("video.mp4")
-        // sets an offset of 30 seconds for the next input file.
-        // This means the audio will start playing nth seconds into the video.
-        .arg("-itsoffset")
-        .arg("-00:00:30")
-        //
-        .arg("-i")
-        .arg("audio.mp3")
-        // [0:a][1:a] selects the audio streams from the first and second input files
-        // [a] the name of the output audio stream
-        .arg("-filter_complex")
-        .arg("\"[0:a][1:a]amerge=inputs=2[a]\"")
-        .arg("-map 0:v -map \"[a]\"")
-        // ensures that the video stream is copied without re-encoding
-        .arg("-c:v")
-        .arg("copy")
-        // stop encoding when the shortest input stream ends
-        .arg("-shortest")
-        //
-        .arg("output.mp4")
-        .spawn()
-        .expect("Failed to start ffmpeg");
+// fn add_audio_to_video() {
+//     // TODO untested
+//     // TODO use ffmpeg-next
+//     let mut child = std::process::Command::new("ffmpeg")
+//         .arg("-i")
+//         .arg("video.mp4")
+//         // sets an offset of 30 seconds for the next input file.
+//         // This means the audio will start playing nth seconds into the video.
+//         .arg("-itsoffset")
+//         .arg("-00:00:30")
+//         //
+//         .arg("-i")
+//         .arg("audio.mp3")
+//         // [0:a][1:a] selects the audio streams from the first and second input files
+//         // [a] the name of the output audio stream
+//         .arg("-filter_complex")
+//         .arg("\"[0:a][1:a]amerge=inputs=2[a]\"")
+//         .arg("-map 0:v -map \"[a]\"")
+//         // ensures that the video stream is copied without re-encoding
+//         .arg("-c:v")
+//         .arg("copy")
+//         // stop encoding when the shortest input stream ends
+//         .arg("-shortest")
+//         //
+//         .arg("output.mp4")
+//         .spawn()
+//         .expect("Failed to start ffmpeg");
 
-    // Wait for ffmpeg to finish
-    child.wait().unwrap();
-}
+//     // Wait for ffmpeg to finish
+//     child.wait().unwrap();
+// }
 
-pub(crate) fn export_to_mp4() {
+pub fn export_to_mp4() {
     video_rs::init().expect("falied to initialize video-rs");
 
     let canvas_width = 512;

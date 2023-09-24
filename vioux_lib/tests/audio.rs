@@ -5,7 +5,8 @@ use md5::{Digest, Md5};
 use vioux::{Audio, RequestOptions, Vioux, ViouxService};
 
 fn compare_clips(file_name: &str, requested_clip: Audio) {
-    let clip_path = PathBuf::from(format!("tests/assets/{}", file_name));
+    let clip_path =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(format!("tests/assets/{}", file_name));
 
     let src = std::fs::File::open(clip_path).unwrap();
 
@@ -44,7 +45,9 @@ pub async fn test_request_audio() {
 pub async fn test_update_audio() {
     let service = ViouxService::default();
 
-    let src = std::fs::File::open("tests/assets/sound.wav").unwrap();
+    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tests/assets/sound.wav");
+
+    let src = std::fs::File::open(path).unwrap();
 
     let audio = Audio::from_media_source(Box::new(src)).expect("failed to decode original file");
 

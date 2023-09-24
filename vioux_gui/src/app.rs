@@ -1,7 +1,7 @@
 use iced::widget::{button, column};
 use iced::{Alignment, Element, Sandbox};
 
-use crate::export::{export_to_mp3, export_to_mp4};
+use vioux::{export_to_mp3, export_to_mp4};
 
 pub struct App {}
 
@@ -35,7 +35,6 @@ impl Sandbox for App {
             button("Export to Mp4").on_press(Message::ExportToMp4)
         ]
         .spacing(20)
-        .padding(20)
         .align_items(Alignment::Center)
         .into()
     }

@@ -1,4 +1,6 @@
-use vioux::{App, ViouxServer, ViouxService};
+mod app;
+
+use vioux::{ViouxServer, ViouxService};
 
 use iced::{Sandbox, Settings};
 
@@ -17,5 +19,5 @@ async fn main() -> anyhow::Result<()> {
     });
 
     // Start UI thread
-    App::run(Settings::default()).map_err(|e| e.into())
+    app::App::run(Settings::default()).map_err(|e| e.into())
 }

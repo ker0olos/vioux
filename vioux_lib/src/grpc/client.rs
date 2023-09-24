@@ -38,8 +38,8 @@ pub fn request_frame(py: Python, n: u64) -> PyResult<&PyAny> {
 }
 
 #[pyfunction]
-pub fn update_frame(py: Python, n: u64, image: PyObject) -> PyResult<&PyAny> {
-    let image = numpy_to_image(image, py)?;
+pub fn update_frame(py: Python, n: u64, image: PyObject, x: u32, y: u32) -> PyResult<&PyAny> {
+    let image = numpy_to_image(image, py, x, y)?;
 
     let request = RequestOptions {
         n: Some(n),
