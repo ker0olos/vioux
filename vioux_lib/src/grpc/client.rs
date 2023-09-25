@@ -1,4 +1,7 @@
-use pyo3::{prelude::*, types::PyByteArray};
+use pyo3::{
+    prelude::*,
+    types::{PyByteArray, PyDict},
+};
 
 use super::{
     proto::{vioux_client::ViouxClient, Audio, RequestOptions},
@@ -33,7 +36,16 @@ pub fn request_frame(py: Python, n: u64) -> PyResult<&PyAny> {
 
         let image = response.image.expect("Received an empty response");
 
-        Ok(Python::with_gil(|py| image_to_numpy(image, py).unwrap()))
+        Ok(Python::with_gil(|py| {
+            let dict = PyDict::new(py);
+
+            dict.set_item("x", image.x).unwrap();
+            dict.set_item("y", image.y).unwrap();
+            dict.set_item("data", image_to_numpy(image, py).unwrap())
+                .unwrap();
+
+            dict.to_object(py)
+        }))
     })
 }
 
@@ -72,14 +84,17 @@ pub fn request_audio(py: Python, n: u64) -> PyResult<&PyAny> {
         let audio = response.audio.expect("Received an empty response");
 
         Ok(Python::with_gil(|py| {
-            let byte_array = PyByteArray::new(py, &audio.data).to_object(py);
-            (
-                byte_array,
-                audio.sample_rate,
-                audio.sample_width,
-                audio.channels,
-                audio.codec,
-            )
+            let dict = PyDict::new(py);
+
+            let byte_array = PyByteArray::new(py, &audio.data);
+
+            dict.set_item("sample_rate", audio.sample_rate).unwrap();
+            dict.set_item("sample_width", audio.sample_width).unwrap();
+            dict.set_item("channels", audio.channels).unwrap();
+            dict.set_item("codec", audio.codec).unwrap();
+            dict.set_item("data", byte_array).unwrap();
+
+            dict.to_object(py)
         }))
     })
 }
