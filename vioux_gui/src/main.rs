@@ -10,14 +10,21 @@ async fn main() -> anyhow::Result<()> {
 
     let vioux_service_impl = ViouxService::default();
 
-    // Start gRPC server thread
-    tokio::spawn(async move {
+    // start gRPC server on a new thread
+    let grpc_server = tokio::spawn(async move {
         tonic::transport::Server::builder()
             .add_service(ViouxServer::new(vioux_service_impl))
             .serve(addr)
             .await
-    });
+    })
+    .abort_handle();
 
-    // Start UI thread
-    app::App::run(Settings::default()).map_err(|e| e.into())
+    // start UI thread
+    app::App::run(Settings::default()).map_err(|e| anyhow::anyhow!(e))?;
+    // the code under this line won't execute until the UI is terminated
+
+    // abort the grpc server
+    grpc_server.abort();
+
+    Ok(())
 }
