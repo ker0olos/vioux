@@ -15,6 +15,9 @@ service Vioux {
 
   //
   rpc UpdateAudio(RequestOptions) returns (UpdatedAudio);
+
+  //
+  rpc AppendAudio(RequestOptions) returns (AppendedAudio);
 }
 
 message RequestOptions {
@@ -30,16 +33,17 @@ message RequestedFrame {
   Image image = 3;
 }
 
-message AppendedFrame { string id = 1; }
-
-message UpdatedFrame {}
-
 message RequestedAudio {
-  uint32 n = 1;
-  Audio audio = 2;
+  uint32 layer = 1;
+  uint32 n = 2;
+  Audio audio = 3;
 }
 
+message UpdatedFrame {}
 message UpdatedAudio {}
+
+message AppendedFrame { string id = 1; }
+message AppendedAudio { string id = 1; }
 
 enum ColorType {
   L8 = 0;  // Pixel is 8-bit luminance

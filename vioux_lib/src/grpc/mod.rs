@@ -1,5 +1,7 @@
 use anyhow::Context;
 
+use uuid::Uuid;
+
 use symphonia::core::{
     audio::{AudioBuffer, AudioBufferRef, RawSampleBuffer},
     codecs::DecoderOptions,
@@ -220,7 +222,7 @@ impl proto::Audio {
             sample_width,
             channels,
             codec,
-            uuid: String::from("TODO"),
+            uuid: Uuid::new_v4().to_string(),
         })
     }
 }

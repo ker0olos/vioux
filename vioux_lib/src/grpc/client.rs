@@ -92,14 +92,14 @@ pub fn append_frame(py: Python, layer: u32, image: PyObject, x: u32, y: u32) -> 
 }
 
 #[pyfunction]
-pub fn request_audio(py: Python, n: u32) -> PyResult<&PyAny> {
+pub fn request_audio(py: Python, layer: u32, n: u32) -> PyResult<&PyAny> {
     pyo3_asyncio::tokio::future_into_py(py, async move {
         let mut client = connect().await;
 
         let response = client
             .request_audio(RequestOptions {
                 n: Some(n),
-                layer: None,
+                layer: Some(layer),
                 image: None,
                 audio: None,
             })
@@ -114,10 +114,13 @@ pub fn request_audio(py: Python, n: u32) -> PyResult<&PyAny> {
 
             let byte_array = PyByteArray::new(py, &audio.data);
 
+            dict.set_item("id", audio.uuid).unwrap();
+
             dict.set_item("sample_rate", audio.sample_rate).unwrap();
             dict.set_item("sample_width", audio.sample_width).unwrap();
             dict.set_item("channels", audio.channels).unwrap();
             dict.set_item("codec", audio.codec).unwrap();
+
             dict.set_item("data", byte_array).unwrap();
 
             dict.to_object(py)
@@ -128,7 +131,7 @@ pub fn request_audio(py: Python, n: u32) -> PyResult<&PyAny> {
 #[pyfunction]
 pub fn update_audio(
     py: Python,
-    n: u32,
+    id: String,
     data: Vec<u8>,
     sample_rate: u32,
     sample_width: u32,
@@ -141,11 +144,11 @@ pub fn update_audio(
         sample_width,
         channels,
         codec,
-        uuid: String::from("TODO"),
+        uuid: id,
     };
 
     let request = RequestOptions {
-        n: Some(n),
+        n: None,
         layer: None,
         image: None,
         audio: Some(audio),
@@ -155,5 +158,40 @@ pub fn update_audio(
         let mut client = connect().await;
         client.update_audio(request).await.expect("Request failed");
         Ok(())
+    })
+}
+
+#[pyfunction]
+pub fn append_audio(
+    py: Python,
+    layer: u32,
+    data: Vec<u8>,
+    sample_rate: u32,
+    sample_width: u32,
+    channels: u32,
+    codec: String,
+) -> PyResult<&PyAny> {
+    let uuid = Uuid::new_v4();
+
+    let audio = Audio {
+        data,
+        sample_rate,
+        sample_width,
+        channels,
+        codec,
+        uuid: uuid.to_string(),
+    };
+
+    let request = RequestOptions {
+        n: None,
+        image: None,
+        layer: Some(layer),
+        audio: Some(audio),
+    };
+
+    pyo3_asyncio::tokio::future_into_py(py, async {
+        let mut client = connect().await;
+        let id = client.append_audio(request).await.expect("Request failed");
+        Ok(id.into_inner().id)
     })
 }

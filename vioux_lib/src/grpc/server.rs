@@ -7,6 +7,8 @@ use crate::grpc::proto::{
     UpdatedAudio, UpdatedFrame,
 };
 
+use super::proto::AppendedAudio;
+
 #[derive(Default)]
 pub struct ViouxService {}
 
@@ -81,23 +83,26 @@ impl Vioux for ViouxService {
     ) -> tonic::Result<Response<RequestedAudio>> {
         let request = request.into_inner();
 
-        if let Some(n) = request.n {
-            if let Some(audio) = store::SEGMENTS.lock().unwrap().get(&n.into()) {
-                Ok(Response::new(RequestedAudio {
-                    n: n.into(),
-                    audio: Some(audio.clone()),
-                }))
+        if let Some(layer) = request.layer {
+            if let Some(n) = request.n {
+                if let Some(audio) = store::get_audio_by_layer(layer).get(n as usize) {
+                    // send a raw decoded image to the client
+                    Ok(Response::new(RequestedAudio {
+                        n,
+                        layer,
+                        audio: Some((*audio).clone()),
+                    }))
+                } else {
+                    Err(Status::new(
+                        tonic::Code::NotFound,
+                        "Requested audio doesn't exist",
+                    ))
+                }
             } else {
-                Err(Status::new(
-                    tonic::Code::NotFound,
-                    "nth frame doesn't exist",
-                ))
+                Err(Status::new(tonic::Code::NotFound, "No frame was request"))
             }
         } else {
-            Err(Status::new(
-                tonic::Code::NotFound,
-                "No nth frame was requested",
-            ))
+            Err(Status::new(tonic::Code::NotFound, "No layer was requested"))
         }
     }
 
@@ -108,18 +113,30 @@ impl Vioux for ViouxService {
         let request = request.into_inner();
 
         if let Some(audio) = request.audio {
-            if let Some(n) = request.n {
-                store::SEGMENTS.lock().unwrap().insert(n.into(), audio);
-
-                Ok(Response::new(UpdatedAudio::default()))
-            } else {
-                Err(Status::new(
-                    tonic::Code::NotFound,
-                    "No nth frame was received",
-                ))
+            match store::update_audio(audio) {
+                Ok(_) => Ok(Response::new(UpdatedAudio::default())),
+                Err(err) => Err(Status::new(tonic::Code::NotFound, err.to_string())),
             }
         } else {
             Err(Status::new(tonic::Code::NotFound, "No audio was received"))
+        }
+    }
+
+    async fn append_audio(
+        &self,
+        request: Request<RequestOptions>,
+    ) -> tonic::Result<Response<AppendedAudio>> {
+        let request = request.into_inner();
+
+        if let Some(layer) = request.layer {
+            if let Some(audio) = request.audio {
+                let id = store::insert_audio_to_layer(layer, audio);
+                Ok(Response::new(AppendedAudio { id }))
+            } else {
+                Err(Status::new(tonic::Code::NotFound, "No audio was received"))
+            }
+        } else {
+            Err(Status::new(tonic::Code::NotFound, "No layer was specified"))
         }
     }
 }

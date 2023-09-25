@@ -4,12 +4,12 @@ use std::{io::Write, path::PathBuf};
 
 use video_rs::{Encoder, EncoderSettings, Time};
 
-use crate::store::{get_frames_by_layer, SEGMENTS};
+use crate::store::{get_audio_by_layer, get_frames_by_layer};
 
 pub fn export_to_mp3() -> Result<(), anyhow::Error> {
-    let segments = SEGMENTS.lock().unwrap();
+    let layer = get_audio_by_layer(0);
 
-    let seg = segments.get(&0).unwrap();
+    let seg = layer.get(0).unwrap();
 
     // TODO use ffmpeg-next
     let mut child = std::process::Command::new("ffmpeg")
@@ -40,8 +40,6 @@ pub fn export_to_mp3() -> Result<(), anyhow::Error> {
 
     // Wait for ffmpeg to finish
     child.wait().unwrap();
-
-    drop(segments);
 
     Ok(())
 }

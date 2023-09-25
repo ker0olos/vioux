@@ -21,7 +21,7 @@ async def request_frame(layer: int, frame: int) -> Image:
     Return a specific frame
     """
 
-async def update_frame(uuid: str, image: numpy.ndarray, x: int, y: int) -> None:
+async def update_frame(id: str, image: numpy.ndarray, x: int, y: int) -> None:
     """
     Update a specific frame
     """
@@ -31,13 +31,13 @@ async def append_frame(layer: int, image: numpy.ndarray, x: int, y: int) -> None
     Append a new frame
     """
 
-async def request_audio(n: int) -> Audio:
+async def request_audio(layer: int, n: int) -> Audio:
     """
     Return a specific audio segment
     """
 
 async def update_audio(
-    n: int,
+    id: str,
     data: bytearray | bytes,
     sample_rate: int,
     sample_width: int,
@@ -46,4 +46,16 @@ async def update_audio(
 ) -> None:
     """
     Update a specific audio segment
+    """
+
+async def append_audio(
+    layer: int,
+    data: bytearray | bytes,
+    sample_rate: int,
+    sample_width: int,
+    channels: int,
+    codec: str,
+) -> str:
+    """
+    Append a new audio segment
     """

@@ -37,6 +37,7 @@ pub async fn test_request_frame() {
     let response = service
         .request_frame(tonic::Request::new(RequestOptions {
             n: Some(0),
+            layer: Some(0),
             image: None,
             audio: None,
         }))
@@ -64,6 +65,7 @@ pub async fn test_update_frame() {
         height: image.height(),
         data: image.into_bytes(),
         color_type: color_type.into(),
+        uuid: String::from(""),
         x: 0,
         y: 0,
     });
@@ -72,6 +74,7 @@ pub async fn test_update_frame() {
         .update_frame(tonic::Request::new(RequestOptions {
             image,
             n: Some(0),
+            layer: Some(0),
             audio: None,
         }))
         .await;

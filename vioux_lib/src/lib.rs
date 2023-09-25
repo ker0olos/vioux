@@ -21,6 +21,7 @@ fn vioux(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
 
     m.add_function(wrap_pyfunction!(grpc::client::request_audio, m)?)?;
     m.add_function(wrap_pyfunction!(grpc::client::update_audio, m)?)?;
+    m.add_function(wrap_pyfunction!(grpc::client::append_audio, m)?)?;
 
     Ok(())
 }

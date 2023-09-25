@@ -30,6 +30,7 @@ pub async fn test_request_audio() {
     let response = service
         .request_audio(tonic::Request::new(RequestOptions {
             n: Some(0),
+            layer: Some(0),
             audio: None,
             image: None,
         }))
@@ -57,6 +58,7 @@ pub async fn test_update_audio() {
         .update_audio(tonic::Request::new(RequestOptions {
             audio,
             n: Some(0),
+            layer: Some(0),
             image: None,
         }))
         .await;
