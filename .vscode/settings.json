@@ -12,6 +12,7 @@
       "source.organizeImports": true
     },
   },
+  "python.linting.enabled": false,
   "python.terminal.activateEnvInCurrentTerminal": true,
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.languageServer": "Pylance",
