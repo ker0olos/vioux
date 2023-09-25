@@ -17,7 +17,7 @@ use symphonia::core::codecs::{
     CODEC_TYPE_PCM_U8,
 };
 
-use super::proto::{ColorType, Image};
+use crate::grpc::proto::{ColorType, Image};
 
 // functions used by client.rs (executed inside python)
 
@@ -65,7 +65,13 @@ pub fn image_to_numpy(image: Image, py: Python) -> PyResult<PyObject> {
     }
 }
 
-pub fn numpy_to_image(ndarray: PyObject, py: Python, x: u32, y: u32) -> PyResult<Image> {
+pub fn numpy_to_image(
+    ndarray: PyObject,
+    py: Python,
+    uuid: String,
+    x: u32,
+    y: u32,
+) -> PyResult<Image> {
     let binding = ndarray.getattr(py, "__array_interface__")?;
     let interface = binding.extract::<&PyDict>(py)?;
 
@@ -128,6 +134,7 @@ pub fn numpy_to_image(ndarray: PyObject, py: Python, x: u32, y: u32) -> PyResult
         width: shape.1 as u32,
         height: shape.0 as u32,
         color_type: color_type.into(),
+        uuid,
         x,
         y,
     };

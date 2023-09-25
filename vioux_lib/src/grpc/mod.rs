@@ -220,6 +220,7 @@ impl proto::Audio {
             sample_width,
             channels,
             codec,
+            uuid: String::from("TODO"),
         })
     }
 }

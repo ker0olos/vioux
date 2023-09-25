@@ -6,7 +6,8 @@ The idea is to create a scripting-based video editor with bare-minimum features
 included in the box, anything else is added through community plugins and
 user-written code.
 
-> **Note** Vioux is in early development and you can't download it or use it!
+> [!IMPORTANT]\
+> Vioux is in early development and you can't download it or use it!
 
 ## Why
 
@@ -27,8 +28,9 @@ won't compile your code (e.g. rust) before rendering, you will have to manually
 compile it yourself beforehand, or use a valid shebang, in case of languages
 like bash, and javascript.
 
-> **Note** Scripts are called (executed) during rendering and while seeking
-> around in the project timeline.
+> [!Note]\
+> Scripts are called (executed) during rendering and while seeking around in the
+> project timeline.
 
 With that in mind, that our official library is only for python, it
 automatically connects the the server, so users can avoid direct contact with

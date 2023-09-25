@@ -8,6 +8,9 @@ service Vioux {
   rpc UpdateFrame(RequestOptions) returns (UpdatedFrame);
 
   //
+  rpc AppendFrame(RequestOptions) returns (AppendedFrame);
+
+  //
   rpc RequestAudio(RequestOptions) returns (RequestedAudio);
 
   //
@@ -15,20 +18,24 @@ service Vioux {
 }
 
 message RequestOptions {
-  optional uint64 n = 1;
-  optional Image image = 2;
-  optional Audio audio = 3;
+  optional uint32 layer = 1;
+  optional uint32 n = 2;
+  optional Image image = 3;
+  optional Audio audio = 4;
 }
 
 message RequestedFrame {
-  uint64 n = 1;
-  Image image = 2;
+  uint32 layer = 1;
+  uint32 n = 2;
+  Image image = 3;
 }
+
+message AppendedFrame { string id = 1; }
 
 message UpdatedFrame {}
 
 message RequestedAudio {
-  uint64 n = 1;
+  uint32 n = 1;
   Audio audio = 2;
 }
 
@@ -54,18 +61,20 @@ enum ColorType {
 message Image {
   bytes data = 1; // data is always returned in bytes, it's the client's job to
                   // convert to correct data type (e.g. from u8 to u16)
-  ColorType color_type = 2;
-  uint32 width = 3;
-  uint32 height = 4;
-  uint32 x = 5;
-  uint32 y = 6;
+  string uuid = 2;
+  ColorType color_type = 3;
+  uint32 width = 4;
+  uint32 height = 5;
+  uint32 x = 6;
+  uint32 y = 7;
 }
 
 message Audio {
   bytes data = 1; // data is always returned in bytes, it's the client's job to
                   // convert to correct data type (e.g. from u8 to u16)
-  uint32 sample_rate = 2;
-  uint32 sample_width = 3;
-  uint32 channels = 4;
-  string codec = 5;
+  string uuid = 2;
+  uint32 sample_rate = 3;
+  uint32 sample_width = 4;
+  uint32 channels = 5;
+  string codec = 6;
 }

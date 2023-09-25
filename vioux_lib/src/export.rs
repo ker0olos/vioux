@@ -4,7 +4,7 @@ use std::{io::Write, path::PathBuf};
 
 use video_rs::{Encoder, EncoderSettings, Time};
 
-use super::store::{FRAMES, SEGMENTS};
+use crate::store::{get_frames_by_layer, SEGMENTS};
 
 pub fn export_to_mp3() -> Result<(), anyhow::Error> {
     let segments = SEGMENTS.lock().unwrap();
@@ -40,6 +40,8 @@ pub fn export_to_mp3() -> Result<(), anyhow::Error> {
 
     // Wait for ffmpeg to finish
     child.wait().unwrap();
+
+    drop(segments);
 
     Ok(())
 }
@@ -97,7 +99,11 @@ pub fn export_to_mp4() {
 
     let mut insert_timestamp = Time::zero();
 
-    for image in FRAMES.lock().unwrap().values() {
+    println!("{}", "starting export");
+
+    for image in get_frames_by_layer(0) {
+        println!("{}", image.uuid);
+
         let img = image
             .clone()
             .to_dynamic_image()
@@ -116,4 +122,6 @@ pub fn export_to_mp4() {
     }
 
     encoder.finish().expect("failed to finish encode video");
+
+    println!("{}", "export finished");
 }
